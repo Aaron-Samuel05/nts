@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jack Daniel&#39;s Website Preview</title>
+    <meta name="color-scheme" content="light" />
+    <style>
+      :root {
+        --page-bg: #000000;
+        --page-bg-muted: rgb(128, 128, 128);
+        --surface-bg: #FFFFFF;
+        --surface-bg-muted: rgb(128, 128, 128);
+        --surface-border: #E5E7EB;
+        --surface-border-strong: rgb(36, 36, 36);
+        --surface-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.04), 0 8px 8px -8px rgba(0, 0, 0, 0.04);
+        --surface-shadow-soft: 0 0 0 1px #E5E7EB;
+        --ink: #FFFFFF;
+        --muted: #FFFFFF;
+        --subtle: rgb(117, 117, 117);
+        --accent: #007AFF;
+        --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        --font-mono: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, monospace;
+        --body-size: 16px;
+        --body-line: 24px;
+        --body-weight: 400;
+        --label-size: 14px;
+        --label-line: 22px;
+        --label-track: 0.04em;
+        --title-size: 32px;
+        --title-line: 38px;
+        --title-track: -0.03em;
+        --section-size: 32px;
+        --section-line: 40px;
+        --section-track: -0.02em;
+        --source-size: 13px;
+        --source-line: 24px;
+        --space-1: 8px;
+        --space-2: 12px;
+        --space-3: 16px;
+        --space-4: 24px;
+        --space-5: 32px;
+        --space-6: 40px;
+        --radius-panel: 0px;
+        --radius-card: 0px;
+        --radius-micro: 0px;
+        --radius-pill: 999px;
+        --button-height: 40px;
+        --button-font-size: 14px;
+        --button-weight: 500;
+        --button-radius: 999px;
+        --secondary-button-radius: 999px;
+        --layout-gap: 24px;
+        --page-padding: 24px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        color: var(--ink);
+        font-family: var(--font-body);
+        font-size: var(--body-size);
+        font-weight: var(--body-weight);
+        line-height: var(--body-line);
+        background:
+          radial-gradient(circle at top, color-mix(in srgb, var(--accent) 8%, transparent), transparent 30%),
+          linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-muted) 100%);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background-image:
+          linear-gradient(color-mix(in srgb, var(--surface-border) 56%, transparent) 1px, transparent 1px),
+          linear-gradient(90deg, color-mix(in srgb, var(--surface-border) 56%, transparent) 1px, transparent 1px);
+        background-size: 100% calc(48px), calc(48px) 100%;
+        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.3), transparent 88%);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .shell {
+        width: min(1440px, calc(100vw - (var(--page-padding) * 2)));
+        margin: 0 auto;
+        padding: var(--page-padding) 0 calc(var(--page-padding) * 1.2);
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(340px, 0.92fr) minmax(420px, 1fr);
+        gap: var(--layout-gap);
+        align-items: start;
+      }
+
+      .stack {
+        display: grid;
+        gap: var(--space-4);
+      }
+
+      .panel {
+        overflow: hidden;
+        border: 1px solid var(--surface-border);
+        border-radius: var(--radius-panel);
+        background: linear-gradient(180deg, color-mix(in srgb, var(--surface-bg) 88%, white) 0%, var(--surface-bg) 100%);
+        box-shadow: var(--surface-shadow);
+      }
+
+      .panel-inner {
+        padding: var(--space-4);
+      }
+
+      .hero-card {
+        position: relative;
+      }
+
+      .hero-card::before {
+        content: "";
+        position: absolute;
+        left: var(--space-4);
+        right: var(--space-4);
+        top: 0;
+        height: 3px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #000000 0%, #FFFFFF 33%, #A7A7A7 67%, #E5E7EB 100%);
+      }
+
+      .eyebrow {
+        margin-bottom: var(--space-2);
+        color: var(--muted);
+        font-size: var(--label-size);
+        line-height: var(--label-line);
+        letter-spacing: var(--label-track);
+        text-transform: uppercase;
+      }
+
+      .site-title,
+      .section-title {
+        margin: 0;
+        color: var(--ink);
+        font-family: var(--font-display);
+        font-weight: 600;
+      }
+
+      .site-title {
+        font-size: var(--title-size);
+        line-height: var(--title-line);
+        letter-spacing: var(--title-track);
+      }
+
+      .descriptor {
+        margin: var(--space-2) 0 0;
+        max-width: 42ch;
+        color: var(--muted);
+        font-size: var(--body-size);
+        line-height: var(--body-line);
+      }
+
+      .summary {
+        margin: var(--space-3) 0 0;
+        max-width: 56ch;
+        color: var(--muted);
+        font-size: var(--body-size);
+        line-height: var(--body-line);
+      }
+
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        margin: var(--space-3) 0 0;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: calc(8px * 3);
+        padding: 0 var(--space-2);
+        border: 1px solid var(--surface-border);
+        border-radius: var(--radius-pill);
+        background: var(--surface-bg);
+        color: var(--ink);
+        font-size: var(--label-size);
+        line-height: var(--label-line);
+        box-shadow: var(--surface-shadow-soft);
+      }
+
+      .observed-link {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        margin-top: var(--space-4);
+        padding-top: var(--space-3);
+        border-top: 1px solid var(--surface-border);
+        color: var(--muted);
+        font-size: var(--label-size);
+        overflow-wrap: anywhere;
+      }
+
+      .observed-link::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--accent);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
+      }
+
+      .section-title {
+        font-size: var(--section-size);
+        line-height: var(--section-line);
+        letter-spacing: var(--section-track);
+      }
+
+      .section-subtitle {
+        margin: var(--space-2) 0 var(--space-4);
+        color: var(--muted);
+        font-size: var(--body-size);
+        line-height: var(--body-line);
+      }
+
+      .palette-grid,
+      .theme-mode-grid,
+      .type-list,
+      .component-card,
+      .prompt-list,
+      .mini-grid,
+      .token-table {
+        display: grid;
+        gap: var(--space-2);
+      }
+
+      .palette-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--space-2);
+      }
+
+      .palette-row.neutral-row {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .theme-mode-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-3);
+      }
+
+      .theme-mode-card {
+        display: grid;
+        gap: var(--space-2);
+        padding: var(--space-3);
+        border: 1px solid var(--surface-border);
+        border-radius: var(--radius-card);
+        background: color-mix(in srgb, var(--surface-bg) 92%, white);
+      }
+
+      .theme-mode-card.is-dark {
+        background: #111111;
+        color: #f4f4f4;
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+
+      .theme-mode-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-2);
+      }
+
+      .theme-mode-label {
+        color: var(--subtle);
+        font-size: var(--label-size);
+        line-height: var(--label-line);
+        letter-spacing: var(--label-track);
+        text-transform: uppercase;
+      }
+
+      .theme-mode-card.is-dark .theme-mode-label {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .theme-mode-note {
+        margin: 0;
+        color: var(--muted);
+        font-size: calc(var(--body-size) - 1px);
+        line-height: calc(var(--body-line) - 4px);
+      }
+
+      .theme-mode-card.is-dark .theme-mode-note {
+        color: rgba(255, 255, 255, 0.82);
+      }
+
+      .theme-swatch-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--space-2);
+      }
+
+      .theme-swatch {
+        display: grid;
+        gap: 6px;
+      }
+
+      .theme-swatch-box {
+        height: 72px;
+        border-radius: calc(var(--radius-card) - 4px);
+        border: 1px solid color-mix(in srgb, var(--surface-border-strong) 75%, transparent);
+      }
+
+      .theme-mode-card.is-dark .theme-swatch-box {
+        border-color: rgba(255, 255, 255, 0.14);
+      }
+
+      .theme-swatch-name {
+        color: inherit;
+        font-size: 12px;
+        line-height: 1.3;
+      }
+
+      .theme-swatch-value {
+        color: var(--subtle);
+        font-size: 11px;
+        line-height: 1.3;
+      }
+
+      .theme-mode-card.is-dark .theme-swatch-value {
+        color: rgba(255, 255, 255, 0.62);
+      }
+
+      .swatch {
+        display: grid;
+        gap: var(--space-2);
+      }
+
+      .swatch-box {
+        min-height: calc(8px * 12);
+        border-radius: var(--radius-card);
+        border: 1px solid color-mix(in srgb, var(--surface-border-strong) 75%, transparent);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 4%, transparent);
+      }
+
+      .swatch-label,
+      .token-heading,
+      .prompt-card strong,
+      .card-preview h4 {
+        color: var(--ink);
+        font-family: var(--font-display);
+        font-size: var(--body-size);
+        line-height: var(--body-line);
+        font-weight: 600;
+      }
+
+      .swatch-meta,
+      .type-metrics,
+      .mini-label,
+      .copy-state,
+      .file-tab,
+      .ghost-button,
+      .segmented button {
+        color: var(--muted);
+        font-size: var(--label-size);
+        line-height: var(--label-line);
+      }
+
+      .type-row {
+        display: grid;
+        grid-template-columns: 72px minmax(0, 1fr) auto;
+        gap: var(--space-2);
+        align-items: baseline;
+        padding: var(--space-2) 0;
+        border-top: 1px solid var(--surface-border);
+      }
+
+      .type-row:first-child,
+      .mini-row:first-child,
+      .token-row:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .type-role {
+        color: var(--muted);
+        font-size: var(--label-size);
+        line-height: var(--label-line);
+        letter-spacing: var(--label-track);
+        text-transform: uppercase;
+      }
+
+      .type-sample {
+        color: var(--ink);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .split-card {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-4);
+      }
+
+      .token-row,
+      .mini-row {
+        display: grid;
+        gap: var(--space-2);
+        align-items: start;
+        padding-top: var(--space-2);
+        border-top: 1px solid var(--surface-border);
+      }
+
+      .token-row {
+        grid-template-columns: 1fr auto;
+      }
+
+      .mini-row {
+        grid-template-columns: 88px minmax(0, 1fr);
+      }
+
+      .mini-content,
+      .prompt-card p,
+      .card-preview p {
+        color: var(--muted);
+        font-size: var(--body-size);
+        line-height: var(--body-line);
+      }
+
+      .radius-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-2);
+      }
+
+      .radius-card,
+      .prompt-card {
+        padding: var(--space-3);
+        border: 1px solid var(--surface-border);
+        border-radius: var(--radius-card);
+        background: var(--surface-bg-muted);
+        box-shadow: var(--surface-shadow-soft);
+      }
+
+      .radius-demo {
+        aspect-ratio: 1;
+        width: 100%;
+        border: 1px solid var(--surface-border-strong);
+        background: var(--surface-bg);
+      }
+
+      .radius-name {
+        margin-top: var(--space-2);
+        color: var(--ink);
+        font-size: var(--body-size);
+        line-height: var(--body-line);
+        font-weight: 600;
+      }
+
+      .radius-value {
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: var(--label-size);
+      }
+
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+      }
+
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: var(--button-height);
+        padding: 0 var(--space-3);
+        border-radius: var(--button-radius);
+        font-family: var(--font-body);
+        font-size: var(--button-font-size);
+        font-weight: var(--button-weight);
+        line-height: 1;
+        letter-spacing: normal;
+      }
+
+      .cta-primary {
+        border: 1px solid transparent;
+        background: #171717;
+        color: #ffffff;
+        border-radius: 999px;
+      }
+
+      .cta-secondary {
+        border: 1px solid #171717;
+        background: #ffffff;
+        color: #171717;
+        border-radius: 999px;
+        box-shadow: var(--surface-shadow-soft);
+      }
+
+      .card-preview {
+        padding: 16px;
+        border-radius: 0px;
+        border: 1px solid color-mix(in srgb, var(--surface-border-strong) 72%, transparent);
+        background: var(--surface-bg);
+        color: var(--ink);
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.04), 0 8px 8px -8px rgba(0, 0, 0, 0.04);
+      }
+
+      .card-preview h4 {
+        margin: 0 0 var(--space-1);
+      }
+
+      .source-shell {
+        position: sticky;
+        top: var(--page-padding);
+      }
+
+      .source-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-2);
+        padding: var(--space-3) var(--space-4) var(--space-2);
+        border-bottom: 1px solid var(--surface-border);
+      }
+
+      .file-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px var(--space-3);
+      }
+
+      .file-tab {
+        padding: 0 0 var(--space-2);
+        border-bottom: 2px solid transparent;
+      }
+
+      .file-tab.active {
+        color: var(--ink);
+        border-bottom-color: var(--ink);
+        font-weight: 600;
+      }
+
+      .source-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--space-2);
+        padding: var(--space-2) var(--space-4);
+        border-bottom: 1px solid var(--surface-border);
+      }
+
+      .segmented {
+        display: inline-flex;
+        padding: 3px;
+        border: 1px solid var(--surface-border);
+        border-radius: var(--radius-pill);
+        background: var(--surface-bg-muted);
+      }
+
+      .segmented button {
+        border: 0;
+        border-radius: var(--radius-pill);
+        background: transparent;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+
+      .segmented button.is-active {
+        background: var(--surface-bg);
+        color: var(--ink);
+        box-shadow: var(--surface-shadow-soft);
+      }
+
+      .toolbar-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        margin-left: auto;
+      }
+
+      .ghost-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        border: 1px solid var(--surface-border);
+        border-radius: 0px;
+        background: var(--surface-bg);
+        box-shadow: var(--surface-shadow-soft);
+        cursor: pointer;
+      }
+
+      .source-body {
+        max-height: calc(100vh - (var(--page-padding) * 2) - 120px);
+        overflow: auto;
+      }
+
+      .source-view,
+      .rendered-view {
+        margin: 0;
+        padding: var(--space-4);
+      }
+
+      .source-view {
+        color: var(--ink);
+        font-family: var(--font-mono);
+        font-size: var(--source-size);
+        line-height: var(--source-line);
+        white-space: pre-wrap;
+        word-break: break-word;
+        background: var(--surface-bg);
+      }
+
+      .rendered-view {
+        color: var(--ink);
+        font-family: var(--font-body);
+        font-size: var(--body-size);
+        line-height: var(--body-line);
+        background: var(--surface-bg);
+      }
+
+      .rendered-view[hidden],
+      .source-view[hidden] {
+        display: none;
+      }
+
+      .rendered-view h2,
+      .rendered-view h3 {
+        margin: var(--space-4) 0 var(--space-2);
+        color: var(--ink);
+        font-family: var(--font-display);
+        font-weight: 600;
+      }
+
+      .rendered-view h2 {
+        font-size: var(--section-size);
+        line-height: var(--section-line);
+        letter-spacing: var(--section-track);
+      }
+
+      .rendered-view h2:first-child {
+        margin-top: 0;
+      }
+
+      .rendered-view h3 {
+        color: var(--muted);
+        font-size: calc(32px - 4px);
+        line-height: calc(38px - 4px);
+      }
+
+      .rendered-view p,
+      .rendered-view li {
+        color: var(--muted);
+      }
+
+      .rendered-view ul,
+      .rendered-view ol {
+        margin: 0 0 var(--space-3) 20px;
+        padding: 0;
+      }
+
+      .rendered-view table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: var(--space-2) 0 var(--space-4);
+      }
+
+      .rendered-view th,
+      .rendered-view td {
+        padding: var(--space-2) var(--space-2);
+        border: 1px solid var(--surface-border);
+        text-align: left;
+        vertical-align: top;
+        font-size: var(--label-size);
+        line-height: var(--label-line);
+      }
+
+      .rendered-view th {
+        color: var(--ink);
+        background: var(--surface-bg-muted);
+      }
+
+      .rendered-view code {
+        padding: 0.14em 0.4em;
+        border-radius: 0px;
+        background: var(--surface-bg-muted);
+        color: var(--ink);
+        font-family: var(--font-mono);
+        font-size: 0.92em;
+      }
+
+      @media (max-width: 1120px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .source-shell {
+          position: relative;
+          top: 0;
+        }
+
+        .source-body {
+          max-height: none;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .shell {
+          width: min(100vw - (12px * 2), 100%);
+          padding-top: 12px;
+        }
+
+        .panel-inner,
+        .source-view,
+        .rendered-view {
+          padding-left: var(--space-3);
+          padding-right: var(--space-3);
+        }
+
+        .palette-row,
+        .palette-row.neutral-row,
+        .theme-mode-grid,
+        .theme-swatch-row,
+        .split-card,
+        .radius-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .type-row,
+        .mini-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <div class="layout">
+        <section class="stack">
+          <article class="panel hero-card">
+            <div class="panel-inner">
+              <div class="eyebrow">Design Preview</div>
+              <h1 class="site-title">Jack Daniel&#39;s Website</h1>
+              <p class="descriptor">Jack Daniel&#39;s presents itself with a heritage-first, high-contrast editorial system: black f...</p>
+              <div class="chip-row"><span class="chip">Extreme black/white contrast is...</span><span class="chip">Custom Jack Daniel&#39;s serif headl...</span><span class="chip">Condensed uppercase navigation a...</span><span class="chip">Layouts favor full-width image b...</span><span class="chip">Radius and shadows are mostly ab...</span></div>
+              <p class="summary">Jack Daniel&#39;s presents itself with a heritage-first, high-contrast editorial system: black fields, white typography, oversized whiskey-label lettering, product photography, distillery imagery, and blunt uppercase calls to action. The site feels more like a premium brand magazine than a conventional ecommerce homepage. It relies on scale, contrast, and recognizable brand marks instead of decorative UI chrome.</p>
+              <a class="observed-link" href="https://www.jackdaniels.com/" target="_blank" rel="noreferrer">https://www.jackdaniels.com/</a>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-inner">
+              <h2 class="section-title">Palette</h2>
+              <p class="section-subtitle">Roles and neutrals rendered using the extracted design system rather than a separate display theme.</p>
+              <div class="palette-grid"><div class="palette-row"><div class="swatch">
+    <div class="swatch-box" style="background:#000000;"></div>
+    <div class="swatch-label">Charcoal Black</div>
+    <div class="swatch-meta">
+      <span>#000000</span>
+      <span>Primary background</span>
+    </div>
+  </div><div class="swatch">
+    <div class="swatch-box" style="background:#FFFFFF;"></div>
+    <div class="swatch-label">Label White</div>
+    <div class="swatch-meta">
+      <span>#FFFFFF</span>
+      <span>Primary text</span>
+    </div>
+  </div><div class="swatch">
+    <div class="swatch-box" style="background:#A7A7A7;"></div>
+    <div class="swatch-label">Ash Gray</div>
+    <div class="swatch-meta">
+      <span>#A7A7A7</span>
+      <span>Muted utility text</span>
+    </div>
+  </div></div><div class="palette-row neutral-row"><div class="swatch">
+    <div class="swatch-box" style="background:#E5E7EB;"></div>
+    <div class="swatch-label">Bottle Label Border</div>
+    <div class="swatch-meta">
+      <span>#E5E7EB</span>
+      <span>Pale divider</span>
+    </div>
+  </div><div class="swatch">
+    <div class="swatch-box" style="background:#007AFF;"></div>
+    <div class="swatch-label">Browser/Swiper Blue</div>
+    <div class="swatch-meta">
+      <span>#007AFF</span>
+      <span>Utility blue</span>
+    </div>
+  </div><div class="swatch">
+    <div class="swatch-box" style="background:rgb(59 130 246 / 0.5);"></div>
+    <div class="swatch-label">Tailwind Ring Blue</div>
+    <div class="swatch-meta">
+      <span>rgb(59 130 246 / 0.5)</span>
+      <span>Focus ring fallback</span>
+    </div>
+  </div></div></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-inner">
+              <h2 class="section-title">Theme Modes</h2>
+              <p class="section-subtitle">If the product supports light and dark themes, both modes should stay visible in the exported design system and preview.</p>
+              <div class="prompt-card"><strong>Single mode detected</strong><p>No explicit <code>Theme Modes</code> section was detected in the markdown. If the product supports both light and dark themes, document both so the preview can render them side by side.</p></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-inner">
+              <h2 class="section-title">Typography</h2>
+              <p class="section-subtitle">The preview shell itself now uses the extracted typography stack, sizes, line heights, and tracking.</p>
+              <div class="type-list"><div class="type-row">
+        <div class="type-role">Desktop hero headline</div>
+        <div
+          class="type-sample"
+          style="font-size:48px; line-height:56px; font-weight:700; letter-spacing:-4px; font-family:-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Arial, sans-serif;"
+        >
+          The quick brown fox jumps
+        </div>
+        <div class="type-metrics">232px observed • 700 • 191.2px</div>
+      </div><div class="type-row">
+        <div class="type-role">Mobile headline</div>
+        <div
+          class="type-sample"
+          style="font-size:48px; line-height:56px; font-weight:700; letter-spacing:normal; font-family:-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Arial, sans-serif;"
+        >
+          The quick brown fox jumps
+        </div>
+        <div class="type-metrics">70.2px observed • 700 • 63.18px</div>
+      </div><div class="type-row">
+        <div class="type-role">Section heading</div>
+        <div
+          class="type-sample"
+          style="font-size:48px; line-height:48px; font-weight:700; letter-spacing:normal; font-family:-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Arial, sans-serif;"
+        >
+          The quick brown fox jumps
+        </div>
+        <div class="type-metrics">48px-96px inferred • 700 • Tight, about 0.85-0.95</div>
+      </div><div class="type-row">
+        <div class="type-role">Navigation</div>
+        <div
+          class="type-sample"
+          style="font-size:14px; line-height:24px; font-weight:600; letter-spacing:normal; font-family:-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Arial, sans-serif;"
+        >
+          The quick brown fox jumps
+        </div>
+        <div class="type-metrics">14px-16px • 600-700 inferred • 24px</div>
+      </div><div class="type-row">
+        <div class="type-role">Body</div>
+        <div
+          class="type-sample"
+          style="font-size:16px; line-height:24px; font-weight:400; letter-spacing:normal; font-family:-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Arial, sans-serif;"
+        >
+          The quick brown fox jumps
+        </div>
+        <div class="type-metrics">16px observed • 400 • 24px observed</div>
+      </div><div class="type-row">
+        <div class="type-role">CTA / Label</div>
+        <div
+          class="type-sample"
+          style="font-size:14px; line-height:20px; font-weight:600; letter-spacing:normal; font-family:-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Arial, sans-serif;"
+        >
+          The quick brown fox jumps
+        </div>
+        <div class="type-metrics">14px-18px • 600-700 inferred • Tight</div>
+      </div></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-inner">
+              <h2 class="section-title">Spacing &amp; Shape</h2>
+              <p class="section-subtitle">Spacing, panel padding, and radius tokens are mapped directly from the layout rules in the markdown.</p>
+              <div class="split-card">
+    <div>
+      <h3 class="token-heading">Spacing</h3>
+      <div class="token-table"><div class="token-row">
+        <span>Base unit</span>
+        <span>8px</span>
+      </div><div class="token-row">
+        <span>Step 2</span>
+        <span>12px</span>
+      </div><div class="token-row">
+        <span>Step 3</span>
+        <span>16px</span>
+      </div><div class="token-row">
+        <span>Step 4</span>
+        <span>24px</span>
+      </div><div class="token-row">
+        <span>Step 5</span>
+        <span>32px</span>
+      </div></div>
+    </div>
+    <div>
+      <h3 class="token-heading">Border Radius</h3>
+      <div class="radius-grid"><div class="radius-card">
+        <div class="radius-demo" style="border-radius:0px;"></div>
+        <div class="radius-name">Micro utility</div>
+        <div class="radius-value">0px</div>
+      </div><div class="radius-card">
+        <div class="radius-demo" style="border-radius:0px;"></div>
+        <div class="radius-name">Standard module</div>
+        <div class="radius-value">0px</div>
+      </div><div class="radius-card">
+        <div class="radius-demo" style="border-radius:999px;"></div>
+        <div class="radius-name">Category rail</div>
+        <div class="radius-value">999px</div>
+      </div><div class="radius-card">
+        <div class="radius-demo" style="border-radius:999px;"></div>
+        <div class="radius-name">CTA pill</div>
+        <div class="radius-value">999px</div>
+      </div></div>
+    </div>
+  </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-inner">
+              <h2 class="section-title">Components</h2>
+              <p class="section-subtitle">Buttons and cards use the documented height, weight, radius, colors, and surface treatment.</p>
+              <div class="component-card">
+    <div class="button-row">
+      <span class="cta cta-primary">Start Deploying</span>
+      <span class="cta cta-secondary">Get a Demo</span>
+    </div>
+    <div class="card-preview">
+      <h4>System Card Preview</h4>
+      <p>Avoid conventional cards for marketing sections.</p>
+    </div>
+  </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-inner">
+              <h2 class="section-title">System Notes</h2>
+              <p class="section-subtitle">Responsive behavior and depth rules stay visible while keeping the overall proportions calm and readable.</p>
+              <div class="split-card">
+    <div>
+      <h3 class="token-heading">Breakpoints</h3>
+      <div class="mini-grid"><div class="mini-row">
+            <div class="mini-label">Mobile</div>
+            <div class="mini-content"><strong>390px observed</strong><br />Header collapses to menu icon, logo, shop icon; spacing margin becomes 16px; headline becomes about 70px.</div>
+          </div><div class="mini-row">
+            <div class="mini-label">Tablet</div>
+            <div class="mini-content"><strong>768px inferred</strong><br />Likely preserves stacked/mobile navigation until enough width for full nav.</div>
+          </div><div class="mini-row">
+            <div class="mini-label">Desktop</div>
+            <div class="mini-content"><strong>1440px observed</strong><br />Fixed full navigation; header height around 256px; hero headline can reach 232px; component gap around 120px.</div>
+          </div></div>
+    </div>
+    <div>
+      <h3 class="token-heading">Elevation</h3>
+      <div class="mini-grid"><div class="mini-row">
+            <div class="mini-label">Flat</div>
+            <div class="mini-content"><strong>Black/white contrast, no shadow</strong><br />Primary page sections and nav.</div>
+          </div><div class="mini-row">
+            <div class="mini-label">Ring</div>
+            <div class="mini-content"><strong>Minimal or absent</strong><br />Utility focus states only.</div>
+          </div><div class="mini-row">
+            <div class="mini-label">Card</div>
+            <div class="mini-content"><strong>Avoid or keep fully flat</strong><br />Product/recipe items should feel like carousel slides, not cards.</div>
+          </div><div class="mini-row">
+            <div class="mini-label">Focus</div>
+            <div class="mini-content"><strong>Use clear white/black or framework ring when required</strong><br />Accessibility states.</div>
+          </div></div>
+    </div>
+  </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-inner">
+              <h2 class="section-title">Prompt Guide</h2>
+              <p class="section-subtitle">Prompt snippets are shown in the same typography and spacing language as the extracted design system.</p>
+              <div class="prompt-list"><div class="prompt-card"><strong>Quick Summary</strong><p>Build in a Jack Daniel&#39;s-inspired heritage whiskey style: black canvas, white uppercase typography, huge custom-serif display headlines, flat editorial sections, real bottle/distillery imagery, direct CTAs, and minimal UI decoration. Use spacing as drama. Avoid rounded cards, colorful gradients, and SaaS-style shadows.</p></div><div class="prompt-card">
+            <strong>Hero</strong>
+            <p>&quot;Create a full-width black hero with a centered Jack Daniel&#39;s-style product bottle, a massive uppercase serif headline in white, and one compact uppercase CTA below.&quot;</p>
+          </div><div class="prompt-card">
+            <strong>Card</strong>
+            <p>&quot;Create a flat carousel slide for a whiskey product with bottle imagery, uppercase product name, one short descriptor line, and a white uppercase learn-more link.&quot;</p>
+          </div><div class="prompt-card">
+            <strong>Navigation</strong>
+            <p>&quot;Create a fixed black header with centered logo, uppercase condensed nav links, locale selector, and direct shop/subscribe actions; collapse to menu-logo-shop icons on mobile.&quot;</p>
+          </div><div class="prompt-card">
+            <strong>Button or badge</strong>
+            <p>&quot;Use a text-first uppercase CTA with no rounded filled container, crisp hover transition, and strong white-on-black contrast.&quot;</p>
+          </div><div class="prompt-card"><strong>Ready-to-Use Prompt</strong><p>Design this page in the Jack Daniel&#39;s website language: black-and-white heritage whiskey branding, oversized uppercase custom-serif headlines, condensed uppercase navigation, real bottle and distillery photography, flat full-width sections, short imperative CTAs, large editorial spacing, no soft shadows, no rounded SaaS cards, and mobile navigation reduced to simple icon actions.</p></div></div>
+              <div class="split-card" style="margin-top:var(--space-4);">
+    <div>
+      <h3 class="token-heading">Do</h3>
+      <div class="mini-grid"><div class="mini-row"><div class="mini-label">Do</div><div class="mini-content">Use black as the dominant canvas and white as the dominant foreground.</div></div><div class="mini-row"><div class="mini-label">Do</div><div class="mini-content">Use huge uppercase serif headlines for hero and major section identity.</div></div><div class="mini-row"><div class="mini-label">Do</div><div class="mini-content">Use real product and distillery imagery.</div></div><div class="mini-row"><div class="mini-label">Do</div><div class="mini-content">Keep CTAs short, uppercase, and direct.</div></div></div>
+    </div>
+    <div>
+      <h3 class="token-heading">Don't</h3>
+      <div class="mini-grid"><div class="mini-row"><div class="mini-label">Don't</div><div class="mini-content">Do not add colorful gradients or decorative backgrounds.</div></div><div class="mini-row"><div class="mini-label">Don't</div><div class="mini-content">Do not turn the system into rounded SaaS cards.</div></div><div class="mini-row"><div class="mini-label">Don't</div><div class="mini-content">Do not use soft shadows as a primary separator.</div></div><div class="mini-row"><div class="mini-label">Don't</div><div class="mini-content">Do not write long marketing paragraphs where a short bold line works.</div></div></div>
+    </div>
+  </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="source-shell">
+          <article class="panel">
+            <div class="source-header">
+              <div class="file-tabs">
+                <span class="file-tab">design-system.md</span>
+                <span class="file-tab active">DESIGN.md</span>
+                <span class="file-tab">Design JSON</span>
+                <span class="file-tab">CSS Variables</span>
+                <span class="file-tab">Design Tokens</span>
+              </div>
+            </div>
+            <div class="source-toolbar">
+              <div class="segmented" role="tablist" aria-label="View Switcher">
+                <button class="is-active" data-view="source" type="button">Source</button>
+                <button data-view="preview" type="button">Preview</button>
+              </div>
+              <div class="toolbar-actions">
+                <button class="ghost-button" id="copyButton" type="button">Copy</button>
+                <a class="ghost-button" href="DESIGN.md" download>Open .md</a>
+                <span class="copy-state" id="copyState"></span>
+              </div>
+            </div>
+            <div class="source-body">
+              <pre class="source-view" id="sourceView"># Design System: Jack Daniel&#39;s Website
+
+## 1. Visual Theme &amp; Atmosphere
+
+Jack Daniel&#39;s presents itself with a heritage-first, high-contrast editorial system: black fields, white typography, oversized whiskey-label lettering, product photography, distillery imagery, and blunt uppercase calls to action. The site feels more like a premium brand magazine than a conventional ecommerce homepage. It relies on scale, contrast, and recognizable brand marks instead of decorative UI chrome.
+
+- Overall feeling: Historic, confident, Americana, product-led, and deliberately bold.
+- Visual density: High-impact hero areas with very large type, followed by content bands, carousels, and footer link groups.
+- Brand posture: Established and iconic; copy is short, declarative, and self-assured.
+- Signature motifs: Black-and-white label contrast, giant serif headlines, uppercase navigation, bottle cutouts, distillery photography, and carousel-driven product discovery.
+
+### Key Characteristics
+
+- Extreme black/white contrast is the core visual system.
+- Custom Jack Daniel&#39;s serif headlines are used at very large scale.
+- Condensed uppercase navigation and labels create the whiskey-label tone.
+- Layouts favor full-width image bands, fixed navigation, and large vertical spacing.
+- Radius and shadows are mostly absent; the brand language is flat, graphic, and print-like.
+
+## 2. Color Palette &amp; Roles
+
+| Role | Semantic Name | Value | Usage |
+| --- | --- | --- | --- |
+| Primary background | Charcoal Black | `#000000` | Dominant site background, header field, hero backdrop, footer, image overlays. |
+| Primary text | Label White | `#FFFFFF` | Headings, nav, CTA text, footer links, high-contrast copy. |
+| Muted utility text | Ash Gray | `#A7A7A7` | Secondary/legal footer copy and less prominent metadata. |
+| Pale divider | Bottle Label Border | `#E5E7EB` | Default computed border color; mostly appears as utility/reset border color rather than visible structure. |
+| Utility blue | Browser/Swiper Blue | `#007AFF` | Observed Swiper token; not a brand accent and should be avoided for core brand CTAs. |
+| Focus ring fallback | Tailwind Ring Blue | `rgb(59 130 246 / 0.5)` | Framework focus-ring token; not visually central to the brand. |
+
+### Primary
+
+- Black and white carry almost all visual identity.
+- White content on black backgrounds should feel like printed bottle-label typography.
+
+### Interactive
+
+- Links and buttons are usually uppercase text treatments rather than rounded button surfaces.
+- Primary CTAs read as white uppercase text, often with a trailing arrow or direct imperative label.
+- Carousel controls are functional, minimal, and not heavily decorated.
+
+### Neutral Scale
+
+- `#000000` for immersive dark surfaces.
+- `#FFFFFF` for primary foreground.
+- `#A7A7A7` for restrained legal and secondary text.
+- `#E5E7EB` appears as a reset/default border color, not as a prominent rule.
+
+### Surface &amp; Overlay
+
+- Main surface: black.
+- Secondary surfaces: image-backed sections and product photography zones.
+- Overlay behavior: text sits directly on dark/image areas; avoid translucent cards unless required for legibility.
+
+### Theme Modes
+
+The observed public homepage does not expose a light/dark theme toggle. Treat the dark brand mode as the canonical mode.
+
+#### Light Mode
+
+- Background: Not observed as a user-selectable mode.
+- Surface: Use only for utility pages or legal content if needed.
+- Text: Black on white for legal or form-heavy contexts.
+- Accent: Preserve black/white brand contrast.
+- Notes: Do not redesign the marketing system into a pale theme.
+
+#### Dark Mode
+
+- Background: `#000000`.
+- Surface: Black, image-backed, or product-photo fields.
+- Text: `#FFFFFF`.
+- Accent: Brand marks, bottle imagery, and product color provide accents.
+- Notes: This is the default visual identity.
+
+### Shadows &amp; Depth
+
+- Depth is mostly avoided.
+- Separation comes from scale, contrast, full-width bands, and imagery.
+- Components should not use soft SaaS-style shadows.
+
+## 3. Typography Rules
+
+The typography system is the brand. It mixes a monumental custom serif for headlines, a condensed custom sans for label-like display text, and Amiko for readable body/UI copy.
+
+### Font Family
+
+- Primary body: `Amiko, &quot;Amiko Fallback&quot;`.
+- Display serif: `jdSerif, &quot;jdSerif Fallback&quot;`.
+- Display condensed: `jdSansCondensed, &quot;jdSansCondensed Fallback&quot;`.
+- Additional observed variable: `kozuka-mincho-pr6n`.
+
+### Hierarchy
+
+| Role | Font | Size | Weight | Line Height | Letter Spacing | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| Desktop hero headline | `jdSerif` | `232px` observed | `700` | `191.2px` | `-4px` | Huge uppercase label-style display. Use only for first-viewport impact. |
+| Mobile headline | `jdSerif` | `70.2px` observed | `700` | `63.18px` | `normal` | Compresses dramatically while staying bold and uppercase. |
+| Section heading | `jdSerif` or `jdSansCondensed` | `48px-96px` inferred | `700` | Tight, about `0.85-0.95` | Tight/normal | Short uppercase phrases like &quot;LET&#39;S TALK COCKTAILS&quot;. |
+| Navigation | `jdSansCondensed` or `Amiko` | `14px-16px` | `600-700` inferred | `24px` | Slight uppercase feel | All-caps labels with simple hover/click behavior. |
+| Body | `Amiko` | `16px` observed | `400` | `24px` observed | `normal` | Used for paragraphs, legal copy, and utility text. |
+| CTA / Label | `Amiko` or condensed display | `14px-18px` | `600-700` inferred | Tight | Uppercase | Short imperatives: &quot;LEARN MORE&quot;, &quot;BOOK A TOUR&quot;, &quot;JOIN NOW&quot;. |
+
+### Principles
+
+- Use uppercase generously; lowercase should mainly appear in paragraph copy.
+- Keep headlines short enough to become graphic objects.
+- Let typography carry the brand instead of adding decorative panels.
+- Use tight headline line-height and very large type on desktop.
+
+## 4. Component Stylings
+
+### Buttons and Links
+
+- Primary CTA: Uppercase white text on black or image-backed sections, usually direct and compact.
+- Secondary CTA: Text-link treatment with the same uppercase rhythm; may include `&gt;` as a directional cue.
+- Text links: White on dark fields, black on light/legal fields, minimal underline by default.
+- Hover and active feel: Keep transitions crisp; observed header uses `0.3s cubic-bezier(0, 0, 0.2, 1)`.
+
+### Cards and Containers
+
+- Surface style: Avoid conventional cards for marketing sections.
+- Radius: `0px` observed across body/header/button defaults.
+- Border: Mostly absent; computed reset border color is `#E5E7EB` but visual borders are not a signature.
+- Shadow or elevation: None observed as a core language.
+- Internal spacing: Large editorial spacing rather than boxed padding.
+
+### Inputs and Interactive Controls
+
+- Input treatment: Age gate uses plain date fields and an `ENTER` button inside a centered modal.
+- Focus behavior: Framework focus ring token exists, but visible brand focus styling was not central in the inspected pass.
+- Selection states: Locale selectors use expandable button controls.
+
+### Navigation
+
+- Structure: Desktop has a fixed full-width banner with centered logo, locale selector, and uppercase nav items: shop, whiskeys, cocktail recipes, story, tours, news/events, subscribe.
+- Background treatment: Fixed over the page, black/transparent-feeling with white content.
+- Link style: Uppercase text, compact spacing, direct labels.
+- Sticky or scroll behavior: Header is fixed. Desktop observed at `256px` height; mobile observed at `88px` height.
+- Mobile behavior: Collapses to an icon menu on the left, centered logo, and shop icon on the right.
+
+### Image Treatment
+
+- Product imagery: Bottle cutouts are central and should appear clean, frontal, and high contrast.
+- Photography: Distillery, barrelhouse, statue, tour, and history images create authenticity.
+- Video: The homepage includes an embedded YouTube hero/player region.
+- Border and radius treatment: Images should stay square/rectangular or cutout-based; avoid rounded stock-card treatment.
+
+### Distinctive Components
+
+- Age verification gate: Brand logo, country selector, large uppercase copy, three date inputs, legal agreement copy, and responsible drinking message.
+- Product carousel: Multiple whiskey bottle images with product name, short descriptor, and &quot;LEARN MORE&quot; link.
+- Cocktail carousel: Repeated recipe entries with whiskey type, recipe name, taste tags, and &quot;VIEW RECIPE&quot; CTAs.
+- Distillery/story bands: Full-width photography with large heading and single CTA.
+
+## 5. Layout Principles
+
+### Spacing System
+
+- Base unit: `8px` on mobile, scaling through named tokens.
+- Repeated desktop spacing values: `16px`, `24px`, `32px`, `48px`, `64px`, `80px`, `120px`.
+- Repeated mobile spacing values: `8px`, `16px`, `24px`, `32px`, `48px`, `56px`, `64px`.
+- Observed tokens: `--spacing-xs`, `--spacing-sm`, `--spacing-md`, `--spacing-lg`, `--spacing-xl`, `--spacing-2xl`, `--spacing-3xl`, `--spacing-margin`, `--spacing-component-gap`.
+
+### Grid &amp; Container
+
+- Grid logic: Full-width vertical bands with centered brand content.
+- Max content width: Desktop content can span nearly the full viewport; observed hero headline width was `1376px` in a `1440px` viewport.
+- Section spacing: Large vertical breaks; desktop component gaps reach `120px`.
+
+### Whitespace Philosophy
+
+- Whitespace is bold and theatrical, not delicate.
+- Content is usually centered or strongly aligned around a hero/product image.
+- Avoid dense dashboards, complex nested cards, or multi-column business UI patterns.
+
+### Border Radius Scale
+
+- Micro: `0px`.
+- Standard: `0px`.
+- Large: `0px`.
+- Pill: Not a signature treatment.
+
+## 6. Depth &amp; Elevation
+
+| Level | Treatment | Use |
+| --- | --- | --- |
+| Flat | Black/white contrast, no shadow | Primary page sections and nav. |
+| Ring | Minimal or absent | Utility focus states only. |
+| Card | Avoid or keep fully flat | Product/recipe items should feel like carousel slides, not cards. |
+| Focus | Use clear white/black or framework ring when required | Accessibility states. |
+
+### Depth Principles
+
+- Surface hierarchy comes from image scale and typographic contrast.
+- Shadow language is intentionally suppressed.
+- Blur/glass effects are not part of the observed brand language.
+- Use depth only for modal overlays like age verification or cookie preferences.
+
+## 7. Do&#39;s and Don&#39;ts
+
+### Do
+
+- Use black as the dominant canvas and white as the dominant foreground.
+- Use huge uppercase serif headlines for hero and major section identity.
+- Use real product and distillery imagery.
+- Keep CTAs short, uppercase, and direct.
+- Use large spacing tokens and full-width bands.
+
+### Don&#39;t
+
+- Do not add colorful gradients or decorative backgrounds.
+- Do not turn the system into rounded SaaS cards.
+- Do not use soft shadows as a primary separator.
+- Do not write long marketing paragraphs where a short bold line works.
+- Do not use generic stock imagery when product/distillery imagery can carry the page.
+
+## 8. Responsive Behavior
+
+### Breakpoints
+
+| Name | Width | Key Changes |
+| --- | --- | --- |
+| Mobile | `390px` observed | Header collapses to menu icon, logo, shop icon; spacing margin becomes `16px`; headline becomes about `70px`. |
+| Tablet | `768px` inferred | Likely preserves stacked/mobile navigation until enough width for full nav. |
+| Desktop | `1440px` observed | Fixed full navigation; header height around `256px`; hero headline can reach `232px`; component gap around `120px`. |
+
+### Touch Targets
+
+- Mobile top bar uses icon buttons rather than text-heavy navigation.
+- Keep primary tap targets at least `44px` high.
+
+### Collapsing Strategy
+
+- Desktop behavior: Full nav with locale selector and multiple text links.
+- Tablet behavior: Favor simplified navigation and stacked content.
+- Mobile behavior: Icon menu, centered logo, shop icon; product/cocktail content remains carousel-driven.
+- Breakpoint-driven component changes: Spacing tokens compress strongly, especially `--spacing-margin` from `64px` desktop to `16px` mobile.
+- Touch target and spacing adjustments: Mobile header height is `88px`, enough for comfortable icon tapping.
+
+## 9. Agent Prompt Guide
+
+### Quick Color Reference
+
+- Primary CTA: White text on black or image-backed dark surfaces.
+- Background: `#000000`.
+- Heading text: `#FFFFFF`.
+- Body text: `#FFFFFF` on dark, `#000000` on light/legal surfaces.
+- Border or ring: Minimal; fallback `#E5E7EB` only when needed.
+- Accent: Product photography and Jack Daniel&#39;s brand marks, not bright UI colors.
+
+### Quick Summary
+
+Build in a Jack Daniel&#39;s-inspired heritage whiskey style: black canvas, white uppercase typography, huge custom-serif display headlines, flat editorial sections, real bottle/distillery imagery, direct CTAs, and minimal UI decoration. Use spacing as drama. Avoid rounded cards, colorful gradients, and SaaS-style shadows.
+
+### Example Component Prompts
+
+- Hero: &quot;Create a full-width black hero with a centered Jack Daniel&#39;s-style product bottle, a massive uppercase serif headline in white, and one compact uppercase CTA below.&quot;
+- Card: &quot;Create a flat carousel slide for a whiskey product with bottle imagery, uppercase product name, one short descriptor line, and a white uppercase learn-more link.&quot;
+- Navigation: &quot;Create a fixed black header with centered logo, uppercase condensed nav links, locale selector, and direct shop/subscribe actions; collapse to menu-logo-shop icons on mobile.&quot;
+- Button or badge: &quot;Use a text-first uppercase CTA with no rounded filled container, crisp hover transition, and strong white-on-black contrast.&quot;
+
+### Ready-to-Use Prompt
+
+Design this page in the Jack Daniel&#39;s website language: black-and-white heritage whiskey branding, oversized uppercase custom-serif headlines, condensed uppercase navigation, real bottle and distillery photography, flat full-width sections, short imperative CTAs, large editorial spacing, no soft shadows, no rounded SaaS cards, and mobile navigation reduced to simple icon actions.
+
+### Iteration Guide
+
+1. Increase contrast before adding color.
+2. Make headlines shorter and larger before adding explanatory copy.
+3. Replace decorative UI surfaces with product or distillery imagery.
+4. Keep corners square and shadows absent unless building a modal.
+
+## Optional Appendix: Interaction Patterns
+
+- Scroll behavior: Fixed header remains at top; carousels and embedded video create dynamic sections.
+- Hover behavior: Use crisp `0.3s cubic-bezier(0, 0, 0.2, 1)` transitions for nav/CTA changes.
+- Click behavior: Locale selector, product/cocktail carousel arrows, age gate, cookie preferences, and nav menu are click-driven.
+- Animation tone: Restrained and functional, not playful; motion should support discovery without distracting from the brand.
+
+## Optional Appendix: Content &amp; Messaging Patterns
+
+- Headline pattern: Short uppercase phrases, often declarative: &quot;LET&#39;S TALK COCKTAILS&quot;, &quot;VISIT OUR DISTILLERY&quot;.
+- CTA language: Direct imperatives: &quot;EXPLORE OUR PRODUCTS&quot;, &quot;BOOK A TOUR&quot;, &quot;JOIN NOW&quot;, &quot;LEARN MORE&quot;, &quot;VIEW RECIPE&quot;.
+- Trust signal pattern: Heritage date, Lynchburg Tennessee location, responsible drinking/legal copy.
+- Voice and tone: Confident, historic, simple, and product-proud.
+
+## Optional Appendix: Observed Pages
+
+- `https://www.jackdaniels.com/`: Homepage after age verification and cookie handling; contributed global nav, hero/video, product and cocktail carousel patterns, distillery/story bands, footer, age gate, and responsive behavior.
+
+## Optional Appendix: Evidence Notes
+
+- Observed desktop viewport: `1440px` wide.
+- Observed mobile viewport: `390px` wide.
+- Observed fonts: `Amiko`, `jdSansCondensed`, `jdSerif`, and `kozuka-mincho-pr6n`.
+- Observed desktop hero heading: `jdSerif`, `232px`, `700`, `191.2px` line-height, `-4px` letter-spacing.
+- Observed mobile heading: `jdSerif`, `70.2px`, `700`, `63.18px` line-height.
+- Observed spacing tokens switch between desktop and mobile values.
+- Evidence gap: direct stylesheet-rule extraction was limited by CLI quoting, but computed styles, DOM snapshots, visible text, and responsive snapshots were inspected with `agent-browser`.
+</pre>
+              <article class="rendered-view" id="previewView" hidden><section><h2>1. Visual Theme &amp; Atmosphere</h2><p>Jack Daniel&#39;s presents itself with a heritage-first, high-contrast editorial system: black fields, white typography, oversized whiskey-label lettering, product photography, distillery imagery, and blunt uppercase calls to action. The site feels more like a premium brand magazine than a conventional ecommerce homepage. It relies on scale, contrast, and recognizable brand marks instead of decorative UI chrome.</p><ul><li>Overall feeling: Historic, confident, Americana, product-led, and deliberately bold.</li><li>Visual density: High-impact hero areas with very large type, followed by content bands, carousels, and footer link groups.</li><li>Brand posture: Established and iconic; copy is short, declarative, and self-assured.</li><li>Signature motifs: Black-and-white label contrast, giant serif headlines, uppercase navigation, bottle cutouts, distillery photography, and carousel-driven product discovery.</li></ul><h3>Key Characteristics</h3><ul><li>Extreme black/white contrast is the core visual system.</li><li>Custom Jack Daniel&#39;s serif headlines are used at very large scale.</li><li>Condensed uppercase navigation and labels create the whiskey-label tone.</li><li>Layouts favor full-width image bands, fixed navigation, and large vertical spacing.</li><li>Radius and shadows are mostly absent; the brand language is flat, graphic, and print-like.</li></ul></section><section><h2>2. Color Palette &amp; Roles</h2><table><thead><tr><th>Role</th><th>Semantic Name</th><th>Value</th><th>Usage</th></tr></thead><tbody><tr><td>Primary background</td><td>Charcoal Black</td><td><code>#000000</code></td><td>Dominant site background, header field, hero backdrop, footer, image overlays.</td></tr><tr><td>Primary text</td><td>Label White</td><td><code>#FFFFFF</code></td><td>Headings, nav, CTA text, footer links, high-contrast copy.</td></tr><tr><td>Muted utility text</td><td>Ash Gray</td><td><code>#A7A7A7</code></td><td>Secondary/legal footer copy and less prominent metadata.</td></tr><tr><td>Pale divider</td><td>Bottle Label Border</td><td><code>#E5E7EB</code></td><td>Default computed border color; mostly appears as utility/reset border color rather than visible structure.</td></tr><tr><td>Utility blue</td><td>Browser/Swiper Blue</td><td><code>#007AFF</code></td><td>Observed Swiper token; not a brand accent and should be avoided for core brand CTAs.</td></tr><tr><td>Focus ring fallback</td><td>Tailwind Ring Blue</td><td><code>rgb(59 130 246 / 0.5)</code></td><td>Framework focus-ring token; not visually central to the brand.</td></tr></tbody></table><h3>Primary</h3><ul><li>Black and white carry almost all visual identity.</li><li>White content on black backgrounds should feel like printed bottle-label typography.</li></ul><h3>Interactive</h3><ul><li>Links and buttons are usually uppercase text treatments rather than rounded button surfaces.</li><li>Primary CTAs read as white uppercase text, often with a trailing arrow or direct imperative label.</li><li>Carousel controls are functional, minimal, and not heavily decorated.</li></ul><h3>Neutral Scale</h3><ul><li><code>#000000</code> for immersive dark surfaces.</li><li><code>#FFFFFF</code> for primary foreground.</li><li><code>#A7A7A7</code> for restrained legal and secondary text.</li><li><code>#E5E7EB</code> appears as a reset/default border color, not as a prominent rule.</li></ul><h3>Surface &amp; Overlay</h3><ul><li>Main surface: black.</li><li>Secondary surfaces: image-backed sections and product photography zones.</li><li>Overlay behavior: text sits directly on dark/image areas; avoid translucent cards unless required for legibility.</li></ul><h3>Theme Modes</h3><p>The observed public homepage does not expose a light/dark theme toggle. Treat the dark brand mode as the canonical mode.</p><p>#### Light Mode</p><ul><li>Background: Not observed as a user-selectable mode.</li><li>Surface: Use only for utility pages or legal content if needed.</li><li>Text: Black on white for legal or form-heavy contexts.</li><li>Accent: Preserve black/white brand contrast.</li><li>Notes: Do not redesign the marketing system into a pale theme.</li></ul><p>#### Dark Mode</p><ul><li>Background: <code>#000000</code>.</li><li>Surface: Black, image-backed, or product-photo fields.</li><li>Text: <code>#FFFFFF</code>.</li><li>Accent: Brand marks, bottle imagery, and product color provide accents.</li><li>Notes: This is the default visual identity.</li></ul><h3>Shadows &amp; Depth</h3><ul><li>Depth is mostly avoided.</li><li>Separation comes from scale, contrast, full-width bands, and imagery.</li><li>Components should not use soft SaaS-style shadows.</li></ul></section><section><h2>3. Typography Rules</h2><p>The typography system is the brand. It mixes a monumental custom serif for headlines, a condensed custom sans for label-like display text, and Amiko for readable body/UI copy.</p><h3>Font Family</h3><ul><li>Primary body: <code>Amiko, &quot;Amiko Fallback&quot;</code>.</li><li>Display serif: <code>jdSerif, &quot;jdSerif Fallback&quot;</code>.</li><li>Display condensed: <code>jdSansCondensed, &quot;jdSansCondensed Fallback&quot;</code>.</li><li>Additional observed variable: <code>kozuka-mincho-pr6n</code>.</li></ul><h3>Hierarchy</h3><table><thead><tr><th>Role</th><th>Font</th><th>Size</th><th>Weight</th><th>Line Height</th><th>Letter Spacing</th><th>Notes</th></tr></thead><tbody><tr><td>Desktop hero headline</td><td><code>jdSerif</code></td><td><code>232px</code> observed</td><td><code>700</code></td><td><code>191.2px</code></td><td><code>-4px</code></td><td>Huge uppercase label-style display. Use only for first-viewport impact.</td></tr><tr><td>Mobile headline</td><td><code>jdSerif</code></td><td><code>70.2px</code> observed</td><td><code>700</code></td><td><code>63.18px</code></td><td><code>normal</code></td><td>Compresses dramatically while staying bold and uppercase.</td></tr><tr><td>Section heading</td><td><code>jdSerif</code> or <code>jdSansCondensed</code></td><td><code>48px-96px</code> inferred</td><td><code>700</code></td><td>Tight, about <code>0.85-0.95</code></td><td>Tight/normal</td><td>Short uppercase phrases like &quot;LET&#39;S TALK COCKTAILS&quot;.</td></tr><tr><td>Navigation</td><td><code>jdSansCondensed</code> or <code>Amiko</code></td><td><code>14px-16px</code></td><td><code>600-700</code> inferred</td><td><code>24px</code></td><td>Slight uppercase feel</td><td>All-caps labels with simple hover/click behavior.</td></tr><tr><td>Body</td><td><code>Amiko</code></td><td><code>16px</code> observed</td><td><code>400</code></td><td><code>24px</code> observed</td><td><code>normal</code></td><td>Used for paragraphs, legal copy, and utility text.</td></tr><tr><td>CTA / Label</td><td><code>Amiko</code> or condensed display</td><td><code>14px-18px</code></td><td><code>600-700</code> inferred</td><td>Tight</td><td>Uppercase</td><td>Short imperatives: &quot;LEARN MORE&quot;, &quot;BOOK A TOUR&quot;, &quot;JOIN NOW&quot;.</td></tr></tbody></table><h3>Principles</h3><ul><li>Use uppercase generously; lowercase should mainly appear in paragraph copy.</li><li>Keep headlines short enough to become graphic objects.</li><li>Let typography carry the brand instead of adding decorative panels.</li><li>Use tight headline line-height and very large type on desktop.</li></ul></section><section><h2>4. Component Stylings</h2><h3>Buttons and Links</h3><ul><li>Primary CTA: Uppercase white text on black or image-backed sections, usually direct and compact.</li><li>Secondary CTA: Text-link treatment with the same uppercase rhythm; may include <code>&gt;</code> as a directional cue.</li><li>Text links: White on dark fields, black on light/legal fields, minimal underline by default.</li><li>Hover and active feel: Keep transitions crisp; observed header uses <code>0.3s cubic-bezier(0, 0, 0.2, 1)</code>.</li></ul><h3>Cards and Containers</h3><ul><li>Surface style: Avoid conventional cards for marketing sections.</li><li>Radius: <code>0px</code> observed across body/header/button defaults.</li><li>Border: Mostly absent; computed reset border color is <code>#E5E7EB</code> but visual borders are not a signature.</li><li>Shadow or elevation: None observed as a core language.</li><li>Internal spacing: Large editorial spacing rather than boxed padding.</li></ul><h3>Inputs and Interactive Controls</h3><ul><li>Input treatment: Age gate uses plain date fields and an <code>ENTER</code> button inside a centered modal.</li><li>Focus behavior: Framework focus ring token exists, but visible brand focus styling was not central in the inspected pass.</li><li>Selection states: Locale selectors use expandable button controls.</li></ul><h3>Navigation</h3><ul><li>Structure: Desktop has a fixed full-width banner with centered logo, locale selector, and uppercase nav items: shop, whiskeys, cocktail recipes, story, tours, news/events, subscribe.</li><li>Background treatment: Fixed over the page, black/transparent-feeling with white content.</li><li>Link style: Uppercase text, compact spacing, direct labels.</li><li>Sticky or scroll behavior: Header is fixed. Desktop observed at <code>256px</code> height; mobile observed at <code>88px</code> height.</li><li>Mobile behavior: Collapses to an icon menu on the left, centered logo, and shop icon on the right.</li></ul><h3>Image Treatment</h3><ul><li>Product imagery: Bottle cutouts are central and should appear clean, frontal, and high contrast.</li><li>Photography: Distillery, barrelhouse, statue, tour, and history images create authenticity.</li><li>Video: The homepage includes an embedded YouTube hero/player region.</li><li>Border and radius treatment: Images should stay square/rectangular or cutout-based; avoid rounded stock-card treatment.</li></ul><h3>Distinctive Components</h3><ul><li>Age verification gate: Brand logo, country selector, large uppercase copy, three date inputs, legal agreement copy, and responsible drinking message.</li><li>Product carousel: Multiple whiskey bottle images with product name, short descriptor, and &quot;LEARN MORE&quot; link.</li><li>Cocktail carousel: Repeated recipe entries with whiskey type, recipe name, taste tags, and &quot;VIEW RECIPE&quot; CTAs.</li><li>Distillery/story bands: Full-width photography with large heading and single CTA.</li></ul></section><section><h2>5. Layout Principles</h2><h3>Spacing System</h3><ul><li>Base unit: <code>8px</code> on mobile, scaling through named tokens.</li><li>Repeated desktop spacing values: <code>16px</code>, <code>24px</code>, <code>32px</code>, <code>48px</code>, <code>64px</code>, <code>80px</code>, <code>120px</code>.</li><li>Repeated mobile spacing values: <code>8px</code>, <code>16px</code>, <code>24px</code>, <code>32px</code>, <code>48px</code>, <code>56px</code>, <code>64px</code>.</li><li>Observed tokens: <code>--spacing-xs</code>, <code>--spacing-sm</code>, <code>--spacing-md</code>, <code>--spacing-lg</code>, <code>--spacing-xl</code>, <code>--spacing-2xl</code>, <code>--spacing-3xl</code>, <code>--spacing-margin</code>, <code>--spacing-component-gap</code>.</li></ul><h3>Grid &amp; Container</h3><ul><li>Grid logic: Full-width vertical bands with centered brand content.</li><li>Max content width: Desktop content can span nearly the full viewport; observed hero headline width was <code>1376px</code> in a <code>1440px</code> viewport.</li><li>Section spacing: Large vertical breaks; desktop component gaps reach <code>120px</code>.</li></ul><h3>Whitespace Philosophy</h3><ul><li>Whitespace is bold and theatrical, not delicate.</li><li>Content is usually centered or strongly aligned around a hero/product image.</li><li>Avoid dense dashboards, complex nested cards, or multi-column business UI patterns.</li></ul><h3>Border Radius Scale</h3><ul><li>Micro: <code>0px</code>.</li><li>Standard: <code>0px</code>.</li><li>Large: <code>0px</code>.</li><li>Pill: Not a signature treatment.</li></ul></section><section><h2>6. Depth &amp; Elevation</h2><table><thead><tr><th>Level</th><th>Treatment</th><th>Use</th></tr></thead><tbody><tr><td>Flat</td><td>Black/white contrast, no shadow</td><td>Primary page sections and nav.</td></tr><tr><td>Ring</td><td>Minimal or absent</td><td>Utility focus states only.</td></tr><tr><td>Card</td><td>Avoid or keep fully flat</td><td>Product/recipe items should feel like carousel slides, not cards.</td></tr><tr><td>Focus</td><td>Use clear white/black or framework ring when required</td><td>Accessibility states.</td></tr></tbody></table><h3>Depth Principles</h3><ul><li>Surface hierarchy comes from image scale and typographic contrast.</li><li>Shadow language is intentionally suppressed.</li><li>Blur/glass effects are not part of the observed brand language.</li><li>Use depth only for modal overlays like age verification or cookie preferences.</li></ul></section><section><h2>7. Do&#39;s and Don&#39;ts</h2><h3>Do</h3><ul><li>Use black as the dominant canvas and white as the dominant foreground.</li><li>Use huge uppercase serif headlines for hero and major section identity.</li><li>Use real product and distillery imagery.</li><li>Keep CTAs short, uppercase, and direct.</li><li>Use large spacing tokens and full-width bands.</li></ul><h3>Don&#39;t</h3><ul><li>Do not add colorful gradients or decorative backgrounds.</li><li>Do not turn the system into rounded SaaS cards.</li><li>Do not use soft shadows as a primary separator.</li><li>Do not write long marketing paragraphs where a short bold line works.</li><li>Do not use generic stock imagery when product/distillery imagery can carry the page.</li></ul></section><section><h2>8. Responsive Behavior</h2><h3>Breakpoints</h3><table><thead><tr><th>Name</th><th>Width</th><th>Key Changes</th></tr></thead><tbody><tr><td>Mobile</td><td><code>390px</code> observed</td><td>Header collapses to menu icon, logo, shop icon; spacing margin becomes <code>16px</code>; headline becomes about <code>70px</code>.</td></tr><tr><td>Tablet</td><td><code>768px</code> inferred</td><td>Likely preserves stacked/mobile navigation until enough width for full nav.</td></tr><tr><td>Desktop</td><td><code>1440px</code> observed</td><td>Fixed full navigation; header height around <code>256px</code>; hero headline can reach <code>232px</code>; component gap around <code>120px</code>.</td></tr></tbody></table><h3>Touch Targets</h3><ul><li>Mobile top bar uses icon buttons rather than text-heavy navigation.</li><li>Keep primary tap targets at least <code>44px</code> high.</li></ul><h3>Collapsing Strategy</h3><ul><li>Desktop behavior: Full nav with locale selector and multiple text links.</li><li>Tablet behavior: Favor simplified navigation and stacked content.</li><li>Mobile behavior: Icon menu, centered logo, shop icon; product/cocktail content remains carousel-driven.</li><li>Breakpoint-driven component changes: Spacing tokens compress strongly, especially <code>--spacing-margin</code> from <code>64px</code> desktop to <code>16px</code> mobile.</li><li>Touch target and spacing adjustments: Mobile header height is <code>88px</code>, enough for comfortable icon tapping.</li></ul></section><section><h2>9. Agent Prompt Guide</h2><h3>Quick Color Reference</h3><ul><li>Primary CTA: White text on black or image-backed dark surfaces.</li><li>Background: <code>#000000</code>.</li><li>Heading text: <code>#FFFFFF</code>.</li><li>Body text: <code>#FFFFFF</code> on dark, <code>#000000</code> on light/legal surfaces.</li><li>Border or ring: Minimal; fallback <code>#E5E7EB</code> only when needed.</li><li>Accent: Product photography and Jack Daniel&#39;s brand marks, not bright UI colors.</li></ul><h3>Quick Summary</h3><p>Build in a Jack Daniel&#39;s-inspired heritage whiskey style: black canvas, white uppercase typography, huge custom-serif display headlines, flat editorial sections, real bottle/distillery imagery, direct CTAs, and minimal UI decoration. Use spacing as drama. Avoid rounded cards, colorful gradients, and SaaS-style shadows.</p><h3>Example Component Prompts</h3><ul><li>Hero: &quot;Create a full-width black hero with a centered Jack Daniel&#39;s-style product bottle, a massive uppercase serif headline in white, and one compact uppercase CTA below.&quot;</li><li>Card: &quot;Create a flat carousel slide for a whiskey product with bottle imagery, uppercase product name, one short descriptor line, and a white uppercase learn-more link.&quot;</li><li>Navigation: &quot;Create a fixed black header with centered logo, uppercase condensed nav links, locale selector, and direct shop/subscribe actions; collapse to menu-logo-shop icons on mobile.&quot;</li><li>Button or badge: &quot;Use a text-first uppercase CTA with no rounded filled container, crisp hover transition, and strong white-on-black contrast.&quot;</li></ul><h3>Ready-to-Use Prompt</h3><p>Design this page in the Jack Daniel&#39;s website language: black-and-white heritage whiskey branding, oversized uppercase custom-serif headlines, condensed uppercase navigation, real bottle and distillery photography, flat full-width sections, short imperative CTAs, large editorial spacing, no soft shadows, no rounded SaaS cards, and mobile navigation reduced to simple icon actions.</p><h3>Iteration Guide</h3><ol><li>Increase contrast before adding color.</li><li>Make headlines shorter and larger before adding explanatory copy.</li><li>Replace decorative UI surfaces with product or distillery imagery.</li><li>Keep corners square and shadows absent unless building a modal.</li></ol></section><section><h2>Optional Appendix: Interaction Patterns</h2><ul><li>Scroll behavior: Fixed header remains at top; carousels and embedded video create dynamic sections.</li><li>Hover behavior: Use crisp <code>0.3s cubic-bezier(0, 0, 0.2, 1)</code> transitions for nav/CTA changes.</li><li>Click behavior: Locale selector, product/cocktail carousel arrows, age gate, cookie preferences, and nav menu are click-driven.</li><li>Animation tone: Restrained and functional, not playful; motion should support discovery without distracting from the brand.</li></ul></section><section><h2>Optional Appendix: Content &amp; Messaging Patterns</h2><ul><li>Headline pattern: Short uppercase phrases, often declarative: &quot;LET&#39;S TALK COCKTAILS&quot;, &quot;VISIT OUR DISTILLERY&quot;.</li><li>CTA language: Direct imperatives: &quot;EXPLORE OUR PRODUCTS&quot;, &quot;BOOK A TOUR&quot;, &quot;JOIN NOW&quot;, &quot;LEARN MORE&quot;, &quot;VIEW RECIPE&quot;.</li><li>Trust signal pattern: Heritage date, Lynchburg Tennessee location, responsible drinking/legal copy.</li><li>Voice and tone: Confident, historic, simple, and product-proud.</li></ul></section><section><h2>Optional Appendix: Observed Pages</h2><ul><li><code>https://www.jackdaniels.com/</code>: Homepage after age verification and cookie handling; contributed global nav, hero/video, product and cocktail carousel patterns, distillery/story bands, footer, age gate, and responsive behavior.</li></ul></section><section><h2>Optional Appendix: Evidence Notes</h2><ul><li>Observed desktop viewport: <code>1440px</code> wide.</li><li>Observed mobile viewport: <code>390px</code> wide.</li><li>Observed fonts: <code>Amiko</code>, <code>jdSansCondensed</code>, <code>jdSerif</code>, and <code>kozuka-mincho-pr6n</code>.</li><li>Observed desktop hero heading: <code>jdSerif</code>, <code>232px</code>, <code>700</code>, <code>191.2px</code> line-height, <code>-4px</code> letter-spacing.</li><li>Observed mobile heading: <code>jdSerif</code>, <code>70.2px</code>, <code>700</code>, <code>63.18px</code> line-height.</li><li>Observed spacing tokens switch between desktop and mobile values.</li><li>Evidence gap: direct stylesheet-rule extraction was limited by CLI quoting, but computed styles, DOM snapshots, visible text, and responsive snapshots were inspected with <code>agent-browser</code>.</li></ul></section></article>
+            </div>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const sourceView = document.getElementById("sourceView");
+      const previewView = document.getElementById("previewView");
+      const copyButton = document.getElementById("copyButton");
+      const copyState = document.getElementById("copyState");
+      const viewButtons = document.querySelectorAll("[data-view]");
+
+      function setActiveView(view) {
+        const showSource = view === "source";
+        sourceView.hidden = !showSource;
+        previewView.hidden = showSource;
+        viewButtons.forEach((button) => {
+          button.classList.toggle("is-active", button.dataset.view === view);
+        });
+      }
+
+      viewButtons.forEach((button) => {
+        button.addEventListener("click", () => setActiveView(button.dataset.view));
+      });
+
+      copyButton.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(sourceView.textContent || "");
+          copyState.textContent = "Copied";
+        } catch (error) {
+          copyState.textContent = "Clipboard unavailable";
+        }
+
+        setTimeout(() => {
+          copyState.textContent = "";
+        }, 1400);
+      });
+    </script>
+  </body>
+</html>

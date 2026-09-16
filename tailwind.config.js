@@ -1,0 +1,76 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        'bg': '#030303',
+        'surface': '#050505',
+        'fg': '#FFFFFF',
+        'ink': '#030303',
+        'accent': '#E9542E',
+        'brick': '#050505',
+        'terracotta': '#E9542E',
+        'mustard': '#E9542E',
+        'blue': '#101215',
+        'strawberry': '#111111',
+        'cream': '#FFFFFF',
+        'maroon': '#050505',
+        'bg-deep': '#030303',
+        'bg-maroon': '#050505',
+        'gold': '#FFFFFF',
+        'gold-soft': '#F2F2F2',
+        'muted': '#A7A7A7',
+        'coral-orange': '#E9542E',
+        'hot-pink': '#F4A6C8',
+        'deep-navy': '#101215',
+        'tropical-yellow-green': '#C9C948',
+        'berry-purple': '#111111',
+        'copper-brown': '#111111',
+        'sage-green': '#8FA66B',
+        'sky-blue': '#5FB8D9',
+        'light-grey-border': '#e5e7eb',
+        'error-red': '#e40a0a',
+        'dark-footer-surface': '#1b1c1e',
+        'input-surface': '#1f1f1f',
+        'surface-black': '#000000',
+        'charcoal-text': '#4b5563',
+        'mid-grey-text': '#a7a7a7',
+        'pure-white': '#ffffff',
+        'subtle-grey': '#efefef',
+      },
+      fontFamily: {
+        serif: ['"NTS JD Display"', '"Geist Sans"', 'system-ui', 'sans-serif'],
+        sans: ['"NTS JD Text"', '"Geist Sans"', 'system-ui', 'sans-serif'],
+        mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
+        amiko: ['"NTS JD Text"', '"Geist Sans"', 'system-ui', 'sans-serif'],
+        jdSansCondensed: ['"NTS JD Condensed"', '"Geist Sans"', 'system-ui', 'sans-serif'],
+        jdSansCompressed: ['"NTS JD Display"', '"Geist Sans"', 'system-ui', 'sans-serif'],
+        jdSerif: ['"NTS JD Display"', '"Geist Sans"', 'system-ui', 'sans-serif'],
+        geistPixelSquare: ['"Geist Pixel Square"', '"Geist Mono"', 'monospace'],
+        geistPixelGrid: ['"Geist Pixel Grid"', '"Geist Mono"', 'monospace'],
+        geistPixelCircle: ['"Geist Pixel Circle"', '"Geist Mono"', 'monospace'],
+        geistPixelTriangle: ['"Geist Pixel Triangle"', '"Geist Mono"', 'monospace'],
+        geistPixelLine: ['"Geist Pixel Line"', '"Geist Mono"', 'monospace'],
+      },
+      animation: {
+        'marquee': 'marquee 25s linear infinite',
+        'marquee-reverse': 'marquee-reverse 25s linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        'marquee-reverse': {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0%)' },
+        }
+      }
+    },
+  },
+  plugins: [],
+}

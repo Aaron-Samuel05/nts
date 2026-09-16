@@ -1,0 +1,19 @@
+# NTS Distillers - cleaned MTL
+newmtl tripo_mat_ac92a507
+Kd 0.80000001 0.80000001 0.80000001
+Ka 0.00000000 0.00000000 0.00000000
+Ks 0.80000001 0.80000001 0.80000001
+Ke 0.00000000 0.00000000 0.00000000
+Tf 0.00000000 0.00000000 0.00000000
+d 1.00000000
+Ns 25.00000000
+illum 2
+map_Kd basecolor.jpg
+map_Kn normal.jpg
+norm normal.jpg
+map_Bump -bm 1.000000 normal.jpg
+bump -bm 1.000000 normal.jpg
+map_Ns roughness.jpg
+map_Pr roughness.jpg
+map_refl metallic.jpg
+map_Pm metallic.jpg
