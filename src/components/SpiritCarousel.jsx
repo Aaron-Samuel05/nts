@@ -76,11 +76,11 @@ const PRODUCTS = [
 ]
 
 const POSITIONS = {
-  hero: { x: '0vw', y: '0vh', scale: 1.2, rotation: 0, opacity: 1, blur: 0, z: 20 },
-  next: { x: '35vw', y: '2vh', scale: 0.42, rotation: 8, opacity: 0.52, blur: 5, z: 8 },
-  prev: { x: '-35vw', y: '2vh', scale: 0.42, rotation: -8, opacity: 0.52, blur: 5, z: 8 },
-  hiddenRight: { x: '64vw', y: '6vh', scale: 0.25, rotation: 13, opacity: 0, blur: 12, z: 2 },
-  hiddenLeft: { x: '-64vw', y: '6vh', scale: 0.25, rotation: -13, opacity: 0, blur: 12, z: 2 },
+  hero: { x: '0vw', y: '-1vh', scale: 1.1, rotation: 0, opacity: 1, blur: 0, z: 20 },
+  next: { x: '37vw', y: '1vh', scale: 0.48, rotation: 7, opacity: 0.68, blur: 2.5, z: 8 },
+  prev: { x: '-37vw', y: '1vh', scale: 0.48, rotation: -7, opacity: 0.68, blur: 2.5, z: 8 },
+  hiddenRight: { x: '66vw', y: '5vh', scale: 0.25, rotation: 13, opacity: 0, blur: 12, z: 2 },
+  hiddenLeft: { x: '-66vw', y: '5vh', scale: 0.25, rotation: -13, opacity: 0, blur: 12, z: 2 },
 }
 
 const wrap = (n) => (n + PRODUCTS.length) % PRODUCTS.length
@@ -89,9 +89,9 @@ const bottleStyle = {
   position: 'absolute',
   left: '50%',
   top: '50%',
-  width: 'clamp(250px, 25vw, 420px)',
+  width: 'clamp(240px, 26vw, 410px)',
   maxWidth: '42vw',
-  maxHeight: '68vh',
+  maxHeight: '64vh',
   objectFit: 'contain',
   transform: 'translate(-50%, -50%) translate3d(calc(var(--x, 0vw) + var(--px, 0px)), calc(var(--y, 0vh) + var(--py, 0px)), 0) scale(var(--scale, 1)) rotate(var(--rotation, 0deg)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))',
   transformOrigin: 'center center',
@@ -132,15 +132,16 @@ function moveTo(timeline, node, pos, duration, at = 0) {
 }
 
 const arrowButton = {
-  width: 48,
-  height: 48,
+  width: 46,
+  height: 46,
   borderRadius: '50%',
-  border: '1px solid rgba(255,255,255,.25)',
-  background: 'rgba(0,0,0,.14)',
+  border: '1px solid rgba(255,255,255,.28)',
+  background: 'rgba(0,0,0,.18)',
   color: '#fff',
   display: 'grid',
   placeItems: 'center',
   cursor: 'pointer',
+  transition: 'background .2s ease, border-color .2s ease, transform .2s ease',
 }
 
 export default function SpiritCarousel() {
@@ -274,7 +275,7 @@ export default function SpiritCarousel() {
       )
       .fromTo(titleRef.current,
         { opacity: 0, y: 15, filter: 'blur(5px)' },
-        { opacity: 0.17, y: 0, filter: 'blur(0px)', duration: 0.5, ease: 'power3.out' },
+        { opacity: 0.27, y: 0, filter: 'blur(0px)', duration: 0.5, ease: 'power3.out' },
         0.5,
       )
   }
@@ -305,13 +306,6 @@ export default function SpiritCarousel() {
     if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.15) changeProduct(dx < 0 ? 1 : -1)
   }
 
-  function onWheel(event) {
-    if (detailOpen || lockedRef.current) return
-    if (Math.abs(event.deltaY) < 10) return
-    event.preventDefault()
-    changeProduct(event.deltaY > 0 ? 1 : -1)
-  }
-
   function openDetail() {
     if (lockedRef.current || detailOpen) return
     setDetailOpen(true)
@@ -320,7 +314,7 @@ export default function SpiritCarousel() {
       gsap.killTweensOf([hero, titleRef.current, infoRef.current, controlsRef.current, actionRef.current])
       gsap.timeline({ defaults: { ease: 'power4.inOut' } })
         .to([titleRef.current, infoRef.current, controlsRef.current, actionRef.current], { opacity: 0, y: -24, filter: 'blur(8px)', duration: 0.4, stagger: 0.025 }, 0)
-        .to(hero, { '--x': '-22vw', '--y': '0vh', '--scale': 1.12, '--rotation': '0deg', duration: 0.85 }, 0.08)
+        .to(hero, { '--x': '-22vw', '--y': '0vh', '--scale': 1.08, '--rotation': '0deg', duration: 0.85 }, 0.08)
         .fromTo(detailRef.current, { opacity: 0, yPercent: 7 }, { opacity: 1, yPercent: 0, duration: 0.8 }, 0.2)
         .fromTo(detailInfoRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.55 }, 0.48)
     })
@@ -338,7 +332,7 @@ export default function SpiritCarousel() {
     })
       .to(detailInfoRef.current, { opacity: 0, y: 25, duration: 0.3 }, 0)
       .to(detailRef.current, { opacity: 0, yPercent: 7, duration: 0.55 }, 0)
-      .to(hero, { '--x': '0vw', '--y': '0vh', '--scale': 1.2, duration: 0.8 }, 0.05)
+      .to(hero, { '--x': '0vw', '--y': '-1vh', '--scale': 1.1, duration: 0.8 }, 0.05)
       .to([titleRef.current, infoRef.current, controlsRef.current, actionRef.current], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.5, stagger: 0.04 }, 0.42)
   }
 
@@ -349,7 +343,6 @@ export default function SpiritCarousel() {
       onPointerLeave={() => resetParallax(true)}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
-      onWheel={onWheel}
       style={{
         position: 'relative',
         minHeight: 'calc(100vh - 110px)',
@@ -361,11 +354,20 @@ export default function SpiritCarousel() {
         touchAction: 'pan-y',
       }}
     >
-      <div style={{ position: 'absolute', inset: 0, zIndex: -1, background: 'linear-gradient(90deg, rgba(0,0,0,.22), transparent 45%, rgba(0,0,0,.3))' }} />
+      <div style={{ position: 'absolute', inset: 0, zIndex: -1, background: 'linear-gradient(90deg, rgba(0,0,0,.24), transparent 45%, rgba(0,0,0,.34))' }} />
       <div style={{ position: 'absolute', inset: 0, zIndex: -1, opacity: 0.06, backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")', pointerEvents: 'none' }} />
 
-      <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', pointerEvents: 'none' }}>
-        <div ref={titleRef} style={{ color: 'rgba(255,255,255,.17)', fontFamily: 'Arial Black, sans-serif', fontSize: 'clamp(72px, 14vw, 220px)', lineHeight: 0.78, whiteSpace: 'nowrap', transform: 'translate3d(var(--px,0px),var(--py,0px),0)', userSelect: 'none' }}>{current.ghost}</div>
+      <div style={{ position: 'absolute', left: '50%', bottom: '13%', width: 'min(620px, 62vw)', height: '90px', transform: 'translateX(-50%)', borderRadius: '50%', background: 'radial-gradient(ellipse, color-mix(in srgb, var(--accent,#fff) 22%, transparent), transparent 68%)', filter: 'blur(18px)', opacity: 0.65, pointerEvents: 'none', zIndex: 1 }} />
+
+      <div style={{ position: 'absolute', top: 'clamp(24px, 4vh, 48px)', left: 'clamp(28px, 3.5vw, 60px)', zIndex: 30, pointerEvents: 'none' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'monospace', fontSize: 10, letterSpacing: '.22em', color: 'rgba(255,255,255,.7)', fontWeight: 700 }}>
+          <span style={{ width: 28, height: 1, background: 'var(--accent,#fff)', display: 'block' }} />
+          OUR SPIRITS
+        </div>
+      </div>
+
+      <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', pointerEvents: 'none', zIndex: 2 }}>
+        <div ref={titleRef} style={{ color: 'rgba(255,255,255,.27)', fontFamily: 'var(--font-jd-display, Arial Black, sans-serif)', fontSize: 'clamp(72px, 13.5vw, 215px)', lineHeight: 0.78, letterSpacing: '-.045em', whiteSpace: 'nowrap', transform: 'translate3d(var(--px,0px),var(--py,0px),0)', userSelect: 'none', textShadow: '0 0 32px rgba(255,255,255,.035)' }}>{current.ghost}</div>
       </div>
 
       {PRODUCTS.map((product, index) => (
@@ -379,26 +381,33 @@ export default function SpiritCarousel() {
         />
       ))}
 
-      <div ref={infoRef} style={{ position: 'absolute', left: 'clamp(28px, 3.5vw, 60px)', bottom: 'clamp(36px, 6vh, 76px)', width: 'min(360px, 35vw)', zIndex: 30 }}>
-        <div style={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '.22em', color: 'rgba(255,255,255,.55)', marginBottom: 14 }}>PROPRIETARY DISTILLATION</div>
-        <h2 style={{ margin: 0, fontSize: 'clamp(24px, 2.3vw, 38px)', lineHeight: 0.95, fontWeight: 800 }}>{current.brand}</h2>
-        <div style={{ marginTop: 14, fontSize: 'clamp(14px, 1.1vw, 18px)', fontWeight: 700 }}>{current.product}</div>
-        <p style={{ margin: '16px 0 0', color: 'rgba(255,255,255,.7)', fontSize: 12, lineHeight: 1.6 }}>{current.description}</p>
+      <div ref={infoRef} style={{ position: 'absolute', left: 'clamp(28px, 3.5vw, 60px)', bottom: 'clamp(112px, 14vh, 152px)', width: 'min(390px, 34vw)', maxWidth: 'calc(100vw - 56px)', zIndex: 30 }}>
+        <div style={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '.22em', color: 'rgba(255,255,255,.58)', marginBottom: 13 }}>PROPRIETARY DISTILLATION</div>
+        <h2 style={{ margin: 0, fontFamily: 'var(--font-jd-display, Arial Black, sans-serif)', fontSize: 'clamp(28px, 2.5vw, 40px)', lineHeight: 0.92, fontWeight: 900, letterSpacing: '-.02em' }}>{current.brand}</h2>
+        <div style={{ marginTop: 12, fontSize: 'clamp(14px, 1.05vw, 17px)', lineHeight: 1.25, fontWeight: 700 }}>{current.product}</div>
+        <p style={{ margin: '12px 0 0', color: 'rgba(255,255,255,.72)', fontSize: 12, lineHeight: 1.55, maxWidth: 350 }}>{current.description}</p>
       </div>
 
-      <div ref={controlsRef} style={{ position: 'absolute', left: 'clamp(28px, 3.5vw, 60px)', bottom: 'clamp(24px, 3.5vh, 42px)', display: 'flex', alignItems: 'center', gap: 12, zIndex: 40 }}>
-        <button type="button" aria-label="Previous product" onClick={() => changeProduct(-1)} style={arrowButton}><ArrowLeft size={19} /></button>
-        <button type="button" aria-label="Next product" onClick={() => changeProduct(1)} style={arrowButton}><ArrowRight size={19} /></button>
-        <span style={{ marginLeft: 4, fontFamily: 'monospace', fontSize: 10, letterSpacing: '.18em', color: 'rgba(255,255,255,.62)' }}>{String(active + 1).padStart(2, '0')} / {String(PRODUCTS.length).padStart(2, '0')}</span>
+      <div ref={controlsRef} style={{ position: 'absolute', left: 'clamp(28px, 3.5vw, 60px)', bottom: 'clamp(24px, 3.5vh, 42px)', display: 'flex', alignItems: 'center', gap: 10, zIndex: 40 }}>
+        <button type="button" aria-label="Previous product" onPointerDown={(event) => event.stopPropagation()} onClick={() => changeProduct(-1)} style={arrowButton}><ArrowLeft size={18} /></button>
+        <button type="button" aria-label="Next product" onPointerDown={(event) => event.stopPropagation()} onClick={() => changeProduct(1)} style={arrowButton}><ArrowRight size={18} /></button>
+        <div style={{ marginLeft: 6, display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '.18em', color: 'rgba(255,255,255,.8)' }}>{String(active + 1).padStart(2, '0')}</span>
+          <span style={{ width: 'clamp(54px, 6vw, 86px)', height: 1, background: 'rgba(255,255,255,.25)', position: 'relative', overflow: 'hidden' }}>
+            <span style={{ position: 'absolute', inset: 0, width: `${((active + 1) / PRODUCTS.length) * 100}%`, background: 'var(--accent,#fff)', transition: 'width .45s ease' }} />
+          </span>
+          <span style={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '.18em', color: 'rgba(255,255,255,.48)' }}>{String(PRODUCTS.length).padStart(2, '0')}</span>
+        </div>
       </div>
 
       <button
         ref={actionRef}
         type="button"
+        onPointerDown={(event) => event.stopPropagation()}
         onClick={openDetail}
-        style={{ position: 'absolute', right: 'clamp(28px, 3.5vw, 60px)', bottom: 'clamp(30px, 5vh, 64px)', zIndex: 40, border: 0, background: 'none', color: '#fff', cursor: 'pointer', fontSize: 'clamp(24px, 2.4vw, 38px)', fontWeight: 800, letterSpacing: '-.04em' }}
+        style={{ position: 'absolute', right: 'clamp(28px, 3.5vw, 60px)', bottom: 'clamp(26px, 4vh, 48px)', zIndex: 40, border: 0, background: 'none', color: '#fff', cursor: 'pointer', fontFamily: 'var(--font-jd-display, Arial Black, sans-serif)', fontSize: 'clamp(22px, 2.1vw, 34px)', fontWeight: 900, letterSpacing: '-.035em', padding: 0, display: 'inline-flex', alignItems: 'center', gap: 8 }}
       >
-        VIEW DETAILS <ArrowRight size={28} strokeWidth={2.5} style={{ verticalAlign: 'middle', marginLeft: 8 }} />
+        EXPLORE {current.category.toUpperCase()} <ArrowRight size={25} strokeWidth={2.5} />
       </button>
 
       <div ref={detailRef} style={{ position: 'absolute', inset: 0, zIndex: 35, overflowY: 'auto', opacity: 0, pointerEvents: detailOpen ? 'auto' : 'none', background: 'linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.86) 45%, #050505)', padding: '12vh clamp(28px, 7vw, 120px) 12vh' }}>
