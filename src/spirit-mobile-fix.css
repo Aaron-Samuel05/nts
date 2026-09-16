@@ -57,7 +57,7 @@
     width: clamp(250px, 72vw, 300px) !important;
     max-width: 72vw !important;
     max-height: 58vh !important;
-    transform: translate(-50%, -50%) translate3d(calc(var(--x, 0vw) + var(--px, 0px)), calc(var(--y, 0vh) + var(--py, 0px)), 0) scale(calc(var(--scale, 1) * var(--product-scale, 1))) rotate(var(--rotation, 0deg)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))) !important;
+    transform: translate(-50%, -50%) translate3d(calc(var(--x, 0vw) + var(--px, 0px)), calc(var(--y, 0vh) + var(--py, 0px)), 0) scale(calc(var(--scale, 1) * var(--product-scale, 1))) rotate(var(--rotation, 0deg)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) !important;
     /* Normalize the different source-image framing so each bottle reads at a more consistent size. */
     --product-scale: 1.08;
     /* Fade the rectangular edges of source artwork without changing bottle/logo colors. */
