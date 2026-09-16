@@ -52,15 +52,25 @@
     flex: 0 1 32px !important;
   }
 
-  /* Larger mobile bottles while preserving the original artwork colors. */
+  /* Mobile bottle sizing: larger hero + larger side bottles. */
   .nts-spirit-bottle {
-    width: clamp(240px, 68vw, 285px) !important;
-    max-width: 68vw !important;
-    max-height: 54vh !important;
-    /* Fade the rectangular edges of source artwork without color blending. */
+    width: clamp(250px, 72vw, 300px) !important;
+    max-width: 72vw !important;
+    max-height: 58vh !important;
+    transform: translate(-50%, -50%) translate3d(calc(var(--x, 0vw) + var(--px, 0px)), calc(var(--y, 0vh) + var(--py, 0px)), 0) scale(calc(var(--scale, 1) * var(--product-scale, 1))) rotate(var(--rotation, 0deg)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))) !important;
+    /* Normalize the different source-image framing so each bottle reads at a more consistent size. */
+    --product-scale: 1.08;
+    /* Fade the rectangular edges of source artwork without changing bottle/logo colors. */
     -webkit-mask-image: radial-gradient(ellipse 48% 49% at 50% 50%, #000 66%, rgba(0,0,0,.98) 76%, transparent 100%);
     mask-image: radial-gradient(ellipse 48% 49% at 50% 50%, #000 66%, rgba(0,0,0,.98) 76%, transparent 100%);
   }
+
+  /* Per-artwork compensation: the PNGs have different amounts of transparent/padded space. */
+  .nts-spirit-bottle:nth-of-type(1) { --product-scale: 1.25; }
+  .nts-spirit-bottle:nth-of-type(2) { --product-scale: 1.16; }
+  .nts-spirit-bottle:nth-of-type(3) { --product-scale: 1.20; }
+  .nts-spirit-bottle:nth-of-type(4) { --product-scale: 1.08; }
+  .nts-spirit-bottle:nth-of-type(5) { --product-scale: 1.18; }
 }
 
 @media (max-width: 380px) {
