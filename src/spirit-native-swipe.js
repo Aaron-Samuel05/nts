@@ -1,3 +1,5 @@
+import { gsap } from 'gsap'
+
 // Mobile-only interactive swipe enhancement for the NTS spirits carousel.
 // Keeps the existing GSAP carousel intact and only replaces the touch gesture
 // with a frame-synchronised, finger-following interaction on <=700px screens.
@@ -42,8 +44,8 @@ function initNativeSwipe() {
     const hero = items[active]
     const incoming = items[incomingIndex]
 
-    // Follow the finger directly using transform CSS variables. Because this
-    // runs through requestAnimationFrame, it naturally follows 60/90/120Hz.
+    // Follow the finger directly through requestAnimationFrame. The browser
+    // schedules this at the display's available refresh cadence (including 120Hz).
     setBottle(hero, {
       '--x': `${percent}vw`,
       '--px': '0px',
@@ -110,13 +112,12 @@ function initNativeSwipe() {
     const active = activeIndex(items)
     if (active < 0) return
     const hero = items[active]
-    const dxPercent = (dx / (lastWidth || stage.getBoundingClientRect().width || window.innerWidth)) * 100
     const direction = dx < 0 ? 1 : -1
     const incoming = items[wrap(active + direction, items.length)]
 
-    window.gsap?.to(hero, { '--x': '0vw', duration: 0.24, ease: 'power3.out', overwrite: 'auto' })
+    gsap.to(hero, { '--x': '0vw', duration: 0.24, ease: 'power3.out', overwrite: 'auto' })
     if (incoming) {
-      window.gsap?.to(incoming, {
+      gsap.to(incoming, {
         '--x': direction > 0 ? '68vw' : '-68vw',
         opacity: 0,
         duration: 0.24,
@@ -124,10 +125,6 @@ function initNativeSwipe() {
         overwrite: 'auto',
       })
     }
-
-    // If GSAP is not exposed globally, the inline CSS transition still gets
-    // cleaned up on the next carousel interaction. No desktop behavior is touched.
-    void dxPercent
   }
 
   const onDown = (event) => {
