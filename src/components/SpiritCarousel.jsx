@@ -18,12 +18,13 @@ const DESKTOP_POSITIONS = {
   hiddenLeft: { x: '-66vw', y: '5vh', scale: 0.25, rotation: -13, opacity: 0, blur: 12, z: 2 },
 }
 
+// Mobile uses a tighter visual scale so the hero and side bottles read as one balanced set.
 const MOBILE_POSITIONS = {
-  hero: { x: '0vw', y: '-6vh', scale: 0.78, rotation: 0, opacity: 1, blur: 0, z: 20 },
-  next: { x: '35vw', y: '-4vh', scale: 0.32, rotation: 7, opacity: 0.62, blur: 1.5, z: 8 },
-  prev: { x: '-35vw', y: '-4vh', scale: 0.32, rotation: -7, opacity: 0.62, blur: 1.5, z: 8 },
-  hiddenRight: { x: '68vw', y: '0vh', scale: 0.2, rotation: 13, opacity: 0, blur: 9, z: 2 },
-  hiddenLeft: { x: '-68vw', y: '0vh', scale: 0.2, rotation: -13, opacity: 0, blur: 9, z: 2 },
+  hero: { x: '0vw', y: '-6vh', scale: 0.70, rotation: 0, opacity: 1, blur: 0, z: 20 },
+  next: { x: '36vw', y: '-5vh', scale: 0.40, rotation: 6, opacity: 0.64, blur: 1.2, z: 8 },
+  prev: { x: '-36vw', y: '-5vh', scale: 0.40, rotation: -6, opacity: 0.64, blur: 1.2, z: 8 },
+  hiddenRight: { x: '68vw', y: '0vh', scale: 0.22, rotation: 12, opacity: 0, blur: 9, z: 2 },
+  hiddenLeft: { x: '-68vw', y: '0vh', scale: 0.22, rotation: -12, opacity: 0, blur: 9, z: 2 },
 }
 
 const wrap = (n) => (n + PRODUCTS.length) % PRODUCTS.length
@@ -156,7 +157,7 @@ export default function SpiritCarousel() {
     gsap.timeline({ defaults: { ease: 'power4.inOut' }, onComplete: () => { setDetailOpen(false); resetParallax() } })
       .to(detailInfoRef.current, { opacity: 0, y: 25, duration: 0.3 }, 0)
       .to(detailRef.current, { opacity: 0, yPercent: 7, duration: isMobile ? 0.4 : 0.55 }, 0)
-      .to(hero, isMobile ? { '--x': '0vw', '--y': '-6vh', '--scale': 0.78, filter: 'drop-shadow(0 24px 20px rgba(0,0,0,.36))', duration: 0.6 } : { '--x': '0vw', '--y': '-1vh', '--scale': 1.1, filter: 'drop-shadow(0 28px 22px rgba(0,0,0,.36))', duration: 0.8 }, 0.05)
+      .to(hero, isMobile ? { '--x': '0vw', '--y': '-6vh', '--scale': 0.70, filter: 'drop-shadow(0 24px 20px rgba(0,0,0,.36))', duration: 0.6 } : { '--x': '0vw', '--y': '-1vh', '--scale': 1.1, filter: 'drop-shadow(0 28px 22px rgba(0,0,0,.36))', duration: 0.8 }, 0.05)
       .to([titleRef.current, infoRef.current, controlsRef.current, actionRef.current], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.45, stagger: 0.04 }, isMobile ? 0.32 : 0.42)
   }
 
@@ -208,7 +209,7 @@ export default function SpiritCarousel() {
       `}</style>
       <section ref={stageRef} className="nts-spirit-stage" onPointerMove={onPointerMove} onPointerLeave={() => resetParallax(true)} onPointerDown={onPointerDown} onPointerUp={onPointerUp} style={{ position: 'relative', minHeight: 'calc(100vh - 110px)', overflow: 'hidden', isolation: 'isolate', color: '#fff', background: 'radial-gradient(circle at var(--glowX,50%) var(--glowY,46%), color-mix(in srgb, var(--tone3,#555) 45%, transparent), transparent 28%), linear-gradient(135deg, var(--tone1,#111), var(--tone2,#222) 55%, #050505)', transition: 'background 0.25s ease', touchAction: 'pan-y' }}>
         <div style={{ position: 'absolute', inset: 0, zIndex: -1, background: 'linear-gradient(90deg, rgba(0,0,0,.24), transparent 45%, rgba(0,0,0,.34))' }} />
-        <div style={{ position: 'absolute', inset: 0, zIndex: -1, opacity: 0.06, backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27/%3E%3C/filter%3E%3Crect width=%27100%25 height=%27100%25 fill=%27%23000%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, zIndex: -1, opacity: 0.06, backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")', pointerEvents: 'none' }} />
         <div className="nts-spirit-glow" style={{ position: 'absolute', left: '50%', bottom: '13%', width: 'min(620px, 62vw)', height: '90px', transform: 'translateX(-50%)', borderRadius: '50%', background: 'radial-gradient(ellipse, color-mix(in srgb, var(--accent,#fff) 22%, transparent), transparent 68%)', filter: 'blur(18px)', opacity: 0.65, pointerEvents: 'none', zIndex: 1 }} />
         <div className="nts-spirit-top-label" style={{ position: 'absolute', top: 'clamp(24px, 4vh, 48px)', left: 'clamp(28px, 3.5vw, 60px)', zIndex: 30, pointerEvents: 'none' }}><div style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'monospace', fontSize: 10, letterSpacing: '.22em', color: 'rgba(255,255,255,.7)', fontWeight: 700 }}><span style={{ width: 28, height: 1, background: 'var(--accent,#fff)', display: 'block' }} />OUR SPIRITS</div></div>
         <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', pointerEvents: 'none', zIndex: 2 }}><div ref={titleRef} className="nts-spirit-ghost" style={{ color: 'rgba(255,255,255,.27)', fontFamily: 'var(--font-jd-display, Arial Black, sans-serif)', fontSize: 'clamp(72px, 13.5vw, 215px)', lineHeight: 0.78, letterSpacing: '-.045em', whiteSpace: 'nowrap', transform: 'translate3d(var(--px,0px),var(--py,0px),0)', userSelect: 'none', textShadow: '0 0 32px rgba(255,255,255,.035)' }}>{current.ghost}</div></div>
