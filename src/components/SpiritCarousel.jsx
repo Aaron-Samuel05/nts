@@ -179,12 +179,12 @@ export default function SpiritCarousel() {
           .nts-spirit-info h2{font-size:clamp(26px,8vw,32px)!important;line-height:.92!important}
           .nts-spirit-info>div:nth-child(3){font-size:14px!important;margin-top:9px!important}
           .nts-spirit-info p{font-size:10.5px!important;line-height:1.45!important;margin-top:8px!important;max-width:355px!important}
-          .nts-spirit-controls{left:16px!important;bottom:14px!important;gap:8px!important}
-          .nts-spirit-arrow{width:40px!important;height:40px!important}
-          .nts-spirit-progress{margin-left:4px!important;gap:7px!important}
-          .nts-spirit-progress-line{width:44px!important}
-          .nts-spirit-action{right:16px!important;bottom:25px!important;font-size:18px!important;letter-spacing:-.035em!important;gap:4px!important;max-width:118px!important;white-space:nowrap!important}
-          .nts-spirit-action svg{width:20px!important;height:20px!important}
+          .nts-spirit-controls{left:16px!important;bottom:14px!important;gap:6px!important}
+          .nts-spirit-arrow{width:38px!important;height:38px!important}
+          .nts-spirit-progress{margin-left:3px!important;gap:6px!important}
+          .nts-spirit-progress-line{width:32px!important}
+          .nts-spirit-action{right:12px!important;bottom:21px!important;font-size:clamp(14px,4.2vw,16.5px)!important;letter-spacing:-.04em!important;gap:3px!important;max-width:none!important;white-space:nowrap!important;line-height:1!important}
+          .nts-spirit-action svg{width:18px!important;height:18px!important;flex-shrink:0}
           .nts-spirit-detail{padding:78px 20px 70px!important}
           .nts-spirit-detail-close{top:16px!important;right:16px!important;width:42px!important;height:42px!important}
           .nts-spirit-detail-info{margin-left:0!important;max-width:none!important;padding-top:39vh!important;padding-bottom:0!important}
@@ -196,6 +196,14 @@ export default function SpiritCarousel() {
           .nts-spirit-detail-section h3{font-size:clamp(28px,9vw,40px)!important;line-height:.94!important}
           .nts-spirit-detail-section p{font-size:14px!important;line-height:1.65!important}
           .nts-spirit-detail-end{min-height:35vh!important;margin-top:42px!important}
+        }
+        @media (max-width:360px){
+          .nts-spirit-info p{font-size:9.5px!important;line-height:1.4!important}
+          .nts-spirit-action{font-size:14px!important;right:10px!important}
+          .nts-spirit-controls{left:12px!important;gap:5px!important}
+          .nts-spirit-arrow{width:36px!important;height:36px!important}
+          .nts-spirit-progress{gap:5px!important;margin-left:2px!important}
+          .nts-spirit-progress-line{width:26px!important}
         }
       `}</style>
       <section ref={stageRef} className="nts-spirit-stage" onPointerMove={onPointerMove} onPointerLeave={() => resetParallax(true)} onPointerDown={onPointerDown} onPointerUp={onPointerUp} style={{ position: 'relative', minHeight: 'calc(100vh - 110px)', overflow: 'hidden', isolation: 'isolate', color: '#fff', background: 'radial-gradient(circle at var(--glowX,50%) var(--glowY,46%), color-mix(in srgb, var(--tone3,#555) 45%, transparent), transparent 28%), linear-gradient(135deg, var(--tone1,#111), var(--tone2,#222) 55%, #050505)', transition: 'background 0.25s ease', touchAction: 'pan-y' }}>
