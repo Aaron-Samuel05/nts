@@ -51,6 +51,11 @@
   .nts-spirit-progress-line {
     flex: 0 1 32px !important;
   }
+
+  /* Some bottle PNGs contain a dark rectangular matte/background. Blend it away on mobile. */
+  .nts-spirit-bottle {
+    mix-blend-mode: lighten !important;
+  }
 }
 
 @media (max-width: 380px) {
