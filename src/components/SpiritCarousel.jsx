@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 
-const CAROUSEL_ITEMS = [
+const PRODUCTS = [
   {
     id: 'old-town-whisky',
     brandName: 'OLD TOWN',
@@ -13,8 +13,7 @@ const CAROUSEL_ITEMS = [
     ghostWord: 'MALT WHISKY',
     origin: 'Canacona, Goa, India',
     tagline: 'A malt blended whisky, built to lead the shelf.',
-    description:
-      'Old Town Indian Blended Malt Whisky leads the NTS semi-premium portfolio with a label-forward malt blended whisky presence.',
+    description: 'Old Town Indian Blended Malt Whisky leads the NTS semi-premium portfolio with a label-forward malt blended whisky presence.',
     image: '/portfolio-images/old-town.png',
     tones: ['#1c0f06', '#5C3412', '#a3703b'],
     accent: '#e9a355',
@@ -29,8 +28,7 @@ const CAROUSEL_ITEMS = [
     ghostWord: 'PREMIUM MALT',
     origin: 'Canacona, Goa, India',
     tagline: 'Premium malt, poured for the everyday table.',
-    description:
-      'EAST COAST Premium Malt Whisky is part of the NTS semi-premium portfolio with a premium malt whisky identity.',
+    description: 'EAST COAST Premium Malt Whisky is part of the NTS semi-premium portfolio with a premium malt whisky identity.',
     image: '/portfolio-images/east-coast-premium-malt-whisky.png',
     tones: ['#08131a', '#1F3A4A', '#4d7f96'],
     accent: '#7fd1e6',
@@ -45,8 +43,7 @@ const CAROUSEL_ITEMS = [
     ghostWord: 'XXX RUM',
     origin: 'Canacona, Goa, India',
     tagline: 'Bold rum character, off the Goa line.',
-    description:
-      'EAST COAST xxx Rum brings a bold rum expression to the NTS portfolio with strong shelf recognition.',
+    description: 'EAST COAST xxx Rum brings a bold rum expression to the NTS portfolio with strong shelf recognition.',
     image: '/portfolio-images/east-coast-xxx-rum.png',
     tones: ['#180705', '#4A1B12', '#8a3f24'],
     accent: '#e2833f',
@@ -61,8 +58,7 @@ const CAROUSEL_ITEMS = [
     ghostWord: 'INDIAN BRANDY',
     origin: 'Canacona, Goa, India',
     tagline: 'A smooth blended brandy, East Coast style.',
-    description:
-      'EAST COAST Indian Blended Brandy carries the East Coast range with a smooth blended brandy identity.',
+    description: 'EAST COAST Indian Blended Brandy carries the East Coast range with a smooth blended brandy identity.',
     image: '/portfolio-images/east-coast-indian-blended-brandy.png',
     tones: ['#12040c', '#3A1228', '#6e2650'],
     accent: '#d9799b',
@@ -77,103 +73,107 @@ const CAROUSEL_ITEMS = [
     ghostWord: 'VSOP BRANDY',
     origin: 'Canacona, Goa, India',
     tagline: 'Rich VSOP brandy, built for recognition.',
-    description:
-      'WANTED 999 Vsop Brandy is part of the NTS house portfolio, built around a rich VSOP brandy profile and strong shelf recognition.',
+    description: 'WANTED 999 Vsop Brandy is part of the NTS house portfolio, built around a rich VSOP brandy profile and strong shelf recognition.',
     image: '/portfolio-images/wanted.png',
     tones: ['#0b0804', '#221A0C', '#4a3a1c'],
     accent: '#c9a13b',
   },
 ]
 
-// Real NTS heritage facts (see src/data/siteData.js companyFacts/facilityStats
-// and AboutUs.jsx) — shared across every product rather than invented
-// per-brand history, since NTS's origin story sits at the company level.
-const HERITAGE = {
-  title: 'Built in Goa, rooted in 1980.',
-  lead:
-    'NTS began in 1980 in Pondicherry as NTS Wines under Mr. N.T. Sambath, growing through decades of IMFL and beer distribution before anchoring production at a purpose-built facility.',
-  body:
-    'That facility now runs from a three-acre site in Canacona Industrial Estate, Goa — rotary washers, 8-head vacuum fillers, ROPP and Guala cap systems, and an R&D lab behind every bottle that carries the NTS name.',
-  image: '/images/Canacona_vodka_bottles_orange_ba…_202607231523.jpeg',
-  imageAlt: 'NTS manufacturing facility at Canacona Industrial Estate, Goa',
-  imageLabel: 'CANACONA / GOA',
+const POSITIONS = {
+  hero: { x: '0vw', y: '0vh', scale: 1.2, rotation: 0, opacity: 1, blur: 0, zIndex: 20 },
+  next: { x: '35vw', y: '2vh', scale: 0.42, rotation: 8, opacity: 0.52, blur: 5, zIndex: 8 },
+  prev: { x: '-35vw', y: '2vh', scale: 0.42, rotation: -8, opacity: 0.52, blur: 5, zIndex: 8 },
+  hiddenRight: { x: '64vw', y: '6vh', scale: 0.25, rotation: 13, opacity: 0, blur: 12, zIndex: 2 },
+  hiddenLeft: { x: '-64vw', y: '6vh', scale: 0.25, rotation: -13, opacity: 0, blur: 12, zIndex: 2 },
 }
 
-const COUNT = CAROUSEL_ITEMS.length
-const wrap = (n) => (n + COUNT) % COUNT
+const wrap = (n) => (n + PRODUCTS.length) % PRODUCTS.length
 
-const GRAIN_URL =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E\")"
-
-// Single hero bottle, no peeking neighbours — a clean product-shot
-// presentation (the kind a premium spirits brand uses for its own hero
-// shot) rather than a "wheel" with other bottles visible at the edges.
-const HERO_BASE = { x: '0vw', y: '0vh', scale: 1, rotation: 0 }
-const HERO_DETAIL_SCALE = 1.3
+const GRAIN_URL = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E\")"
 
 function setBottlePosition(node, position) {
   if (!node) return
   gsap.set(node, {
+    left: '50%',
+    '--detail-left': '50%',
     '--base-x': position.x,
     '--base-y': position.y,
     '--base-scale': position.scale,
     '--base-rotation': `${position.rotation}deg`,
-    opacity: 1,
-    filter: 'drop-shadow(0 34px 40px rgba(0,0,0,.45))',
-    zIndex: 4,
+    opacity: position.opacity,
+    filter: `drop-shadow(0 28px 22px rgba(0,0,0,.36)) blur(${position.blur}px)`,
+    zIndex: position.zIndex,
   })
 }
 
-/**
- * Bottle showcase ported from github.com/Aaron-Samuel05/alcshowcase: the
- * five-slot wheel, pointer-follow 3D tilt, and an "explore bottle" detail
- * view that grows the hero bottle and slides tasting/origin copy in beside
- * it. Adapted to NTS's real product data and design system — kept out of
- * this port: the "wheel" of peeking neighbour bottles (a single hero
- * bottle reads as a cleaner, more premium product shot) and the
- * reference's scroll-driven "story/heritage" deep-dive, which hardcodes
- * invented history and hotlinks photos of other real liquor brands (New
- * Amsterdam, Captain Morgan, Hendrick's, Appleton Estate) — NTS's own
- * heritage-scroll below uses the company's real 1980/Goa history instead.
- */
+function animateBottlePosition(timeline, node, position, duration, at = 0) {
+  if (!node) return
+  timeline.to(node, {
+    '--base-x': position.x,
+    '--base-y': position.y,
+    '--base-scale': position.scale,
+    '--base-rotation': `${position.rotation}deg`,
+    opacity: position.opacity,
+    filter: `drop-shadow(0 28px 22px rgba(0,0,0,.36)) blur(${position.blur}px)`,
+    zIndex: position.zIndex,
+    duration,
+  }, at)
+}
+
+const bottleStyle = {
+  position: 'absolute',
+  top: '50%',
+  width: 'clamp(250px, 25vw, 420px)',
+  maxWidth: '42vw',
+  maxHeight: '68vh',
+  objectFit: 'contain',
+  transform: 'translate(-50%, -50%) translate3d(calc(var(--base-x, 0vw) + var(--parallax-x, 0px)), calc(var(--base-y, 0vh) + var(--parallax-y, 0px)), 0) scale(var(--base-scale, 1)) rotate(var(--base-rotation, 0deg)) rotateX(var(--parallax-rx, 0deg)) rotateY(var(--parallax-ry, 0deg))',
+  transformOrigin: 'center center',
+  willChange: 'transform, opacity, filter',
+  userSelect: 'none',
+  pointerEvents: 'none',
+}
+
 export default function SpiritCarousel() {
   const [active, setActive] = useState(0)
   const [detailOpen, setDetailOpen] = useState(false)
-  const [detailScrolled, setDetailScrolled] = useState(false)
-
   const activeRef = useRef(0)
   const lockedRef = useRef(false)
   const stageRef = useRef(null)
-  const heroRef = useRef(null)
-  const dragRef = useRef(null)
+  const bottleRefs = useRef([])
   const titleRef = useRef(null)
   const infoRef = useRef(null)
+  const counterRef = useRef(null)
   const actionRef = useRef(null)
-  const detailViewRef = useRef(null)
-  const detailCopyRef = useRef(null)
-  const detailBackRef = useRef(null)
+  const detailRef = useRef(null)
+  const detailInfoRef = useRef(null)
+  const detailButtonRef = useRef(null)
+  const gestureRef = useRef({ pointerId: null, startX: 0, startY: 0, lastX: 0, lastY: 0, active: false })
+  const current = PRODUCTS[active]
 
-  const current = CAROUSEL_ITEMS[active]
-
-  // Mount: place the hero bottle at rest.
   useLayoutEffect(() => {
-    setBottlePosition(heroRef.current, HERO_BASE)
-    gsap.set(heroRef.current, { '--parallax-x': '0px', '--parallax-y': '0px', '--parallax-rx': '0deg', '--parallax-ry': '0deg' })
-    if (titleRef.current) gsap.set(titleRef.current, { opacity: 1, '--parallax-x': '0px', '--parallax-y': '0px', '--parallax-rx': '0deg', '--parallax-ry': '0deg' })
-    if (detailCopyRef.current) gsap.set(detailCopyRef.current, { '--parallax-x': '0px', '--parallax-y': '0px', '--parallax-rx': '0deg', '--parallax-ry': '0deg' })
+    bottleRefs.current.forEach((node, i) => {
+      if (!node) return
+      const position = i === activeRef.current
+        ? POSITIONS.hero
+        : i === wrap(activeRef.current + 1)
+          ? POSITIONS.next
+          : i === wrap(activeRef.current - 1)
+            ? POSITIONS.prev
+            : POSITIONS.hiddenRight
+      setBottlePosition(node, position)
+      gsap.set(node, { '--parallax-x': '0px', '--parallax-y': '0px', '--parallax-rx': '0deg', '--parallax-ry': '0deg' })
+    })
+    if (titleRef.current) gsap.set(titleRef.current, { '--parallax-x': '0px', '--parallax-y': '0px', '--parallax-rx': '0deg', '--parallax-ry': '0deg', opacity: 0.18 })
+    if (detailInfoRef.current) gsap.set(detailInfoRef.current, { '--parallax-x': '0px', '--parallax-y': '0px', '--parallax-rx': '0deg', '--parallax-ry': '0deg' })
   }, [])
 
   useEffect(() => {
-    const preload = CAROUSEL_ITEMS.map(({ image }) => {
-      const img = new Image()
-      img.src = image
-      return img
-    })
+    const preload = PRODUCTS.map(({ image }) => { const img = new Image(); img.src = image; return img })
     return () => preload.forEach((img) => { img.src = '' })
   }, [])
 
-  // Navigation is button/keyboard only — no wheel/scroll hijacking, so
-  // scrolling the page past this section behaves like any other section.
   useEffect(() => {
     const onKey = (event) => {
       if (detailOpen) {
@@ -188,36 +188,29 @@ export default function SpiritCarousel() {
   })
 
   function resetParallax(immediate = true) {
-    const targets = [titleRef.current, detailCopyRef.current, heroRef.current].filter(Boolean)
+    const targets = [titleRef.current, detailInfoRef.current, ...bottleRefs.current].filter(Boolean)
     gsap.killTweensOf(targets)
-    const vars = {
-      '--parallax-x': '0px',
-      '--parallax-y': '0px',
-      '--parallax-rx': '0deg',
-      '--parallax-ry': '0deg',
-      duration: immediate ? 0 : 0.45,
-      ease: 'power3.out',
-      overwrite: 'auto',
-    }
-    targets.forEach((node) => (immediate ? gsap.set(node, vars) : gsap.to(node, vars)))
+    const vars = { '--parallax-x': '0px', '--parallax-y': '0px', '--parallax-rx': '0deg', '--parallax-ry': '0deg', duration: immediate ? 0 : 0.45, ease: 'power3.out', overwrite: 'auto' }
+    targets.forEach((node) => immediate ? gsap.set(node, vars) : gsap.to(node, vars))
   }
 
-  // Crossfades the one hero bottle in place — a small dip in scale/opacity
-  // toward the direction of travel, then the new bottle settles back to
-  // rest — rather than sliding other bottles through from off-stage.
   function changeProduct(direction) {
     if (lockedRef.current || detailOpen) return
     lockedRef.current = true
     resetParallax(true)
-
     const old = activeRef.current
     const next = wrap(old + direction)
-    const nextItem = CAROUSEL_ITEMS[next]
-    const hero = heroRef.current
-    gsap.killTweensOf([titleRef.current, infoRef.current, actionRef.current, hero])
+    const oldHero = bottleRefs.current[old]
+    const incoming = bottleRefs.current[next]
+    const entering = bottleRefs.current[wrap(old + direction * 2)]
+    const exiting = bottleRefs.current[wrap(old - direction)]
+
+    setBottlePosition(entering, direction > 0 ? POSITIONS.hiddenRight : POSITIONS.hiddenLeft)
+    setBottlePosition(incoming, direction > 0 ? POSITIONS.hiddenRight : POSITIONS.hiddenLeft)
+    gsap.killTweensOf([titleRef.current, infoRef.current, counterRef.current, actionRef.current, oldHero, incoming, entering, exiting])
 
     const timeline = gsap.timeline({
-      defaults: { ease: 'power3.inOut' },
+      defaults: { ease: 'power4.inOut' },
       onComplete: () => {
         activeRef.current = next
         setActive(next)
@@ -226,199 +219,109 @@ export default function SpiritCarousel() {
       },
     })
 
-    timeline.to(
-      stageRef.current,
-      {
-        '--tone-1': nextItem.tones[0],
-        '--tone-2': nextItem.tones[1],
-        '--tone-3': nextItem.tones[2],
-        '--accent': nextItem.accent,
-        duration: 0.95,
-      },
-      0
-    )
+    timeline.to(stageRef.current, {
+      '--tone-1': PRODUCTS[next].tones[0],
+      '--tone-2': PRODUCTS[next].tones[1],
+      '--tone-3': PRODUCTS[next].tones[2],
+      '--accent': PRODUCTS[next].accent,
+      duration: 0.95,
+    }, 0)
+    animateBottlePosition(timeline, oldHero, direction > 0 ? POSITIONS.prev : POSITIONS.next, 0.92, 0)
+    animateBottlePosition(timeline, incoming, POSITIONS.hero, 0.98, 0.03)
+    animateBottlePosition(timeline, entering, direction > 0 ? POSITIONS.next : POSITIONS.prev, 0.9, 0.08)
+    animateBottlePosition(timeline, exiting, direction > 0 ? POSITIONS.hiddenLeft : POSITIONS.hiddenRight, 0.72, 0)
 
-    if (hero) {
-      timeline
-        .to(hero, { '--base-x': `${direction > 0 ? -4 : 4}vw`, '--base-scale': 0.94, opacity: 0, duration: 0.34 }, 0)
-        .call(() => { hero.setAttribute('src', nextItem.image) }, [], 0.34)
-        .fromTo(
-          hero,
-          { '--base-x': `${direction > 0 ? 4 : -4}vw` },
-          { '--base-x': '0vw', '--base-scale': 1, opacity: 1, duration: 0.55, ease: 'power3.out' },
-          0.36
-        )
-    }
-
-    timeline
-      .to([titleRef.current, infoRef.current, actionRef.current], { opacity: 0, y: -12, filter: 'blur(5px)', duration: 0.28, stagger: 0.025 }, 0)
+    timeline.to([titleRef.current, infoRef.current, counterRef.current, actionRef.current], { opacity: 0, y: -12, filter: 'blur(5px)', duration: 0.28, stagger: 0.025 }, 0)
       .call(() => { activeRef.current = next; setActive(next) }, [], 0.38)
-      .fromTo(
-        [infoRef.current, actionRef.current],
-        { opacity: 0, y: 15, filter: 'blur(5px)' },
-        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.5, stagger: 0.04, ease: 'power3.out' },
-        0.5
-      )
-      .fromTo(
-        titleRef.current,
-        { opacity: 0, y: 15, filter: 'blur(5px)' },
-        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.5, ease: 'power3.out' },
-        0.5
-      )
+      .fromTo([infoRef.current, counterRef.current, actionRef.current], { opacity: 0, y: 15, filter: 'blur(5px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.5, stagger: 0.04, ease: 'power3.out' }, 0.5)
+      .fromTo(titleRef.current, { opacity: 0, y: 15, filter: 'blur(5px)' }, { opacity: 0.18, y: 0, filter: 'blur(0px)', duration: 0.5, ease: 'power3.out' }, 0.5)
   }
 
-  // Pointer-follow tilt: background glow, headline, and the hero bottle
-  // each drift toward the cursor by a different amount. Skipped on touch
-  // devices via the `(hover: none)` rule in index.css.
   const onPointerMove = (event) => {
     if (!stageRef.current || lockedRef.current) return
     const rect = stageRef.current.getBoundingClientRect()
     const x = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width - 0.5) * 2))
     const y = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height - 0.5) * 2))
-
-    gsap.to(stageRef.current, {
-      '--glow-x': `${50 + x * 8}%`,
-      '--glow-y': `${46 + y * 6}%`,
-      duration: 0.65,
-      ease: 'power3.out',
-      overwrite: 'auto',
-    })
-
-    if (!detailOpen && titleRef.current) {
-      gsap.to(titleRef.current, {
-        '--parallax-x': `${x * 8}px`,
-        '--parallax-y': `${y * 5}px`,
-        '--parallax-rx': `${-y * 0.45}deg`,
-        '--parallax-ry': `${x * 0.65}deg`,
-        duration: 0.65,
-        ease: 'power3.out',
-        overwrite: 'auto',
-      })
-    }
-
-    const hero = heroRef.current
-    if (hero) {
-      gsap.to(hero, {
-        '--parallax-x': `${x * (detailOpen ? 5 : 7)}px`,
-        '--parallax-y': `${y * (detailOpen ? 3 : 4)}px`,
-        '--parallax-rx': `${-y * 1.1}deg`,
-        '--parallax-ry': `${x * 1.6}deg`,
-        duration: 0.65,
-        ease: 'power3.out',
-        overwrite: 'auto',
-      })
-    }
-
-    if (detailOpen && detailCopyRef.current) {
-      gsap.to(detailCopyRef.current, {
-        '--parallax-x': `${x * 6}px`,
-        '--parallax-y': `${y * 4}px`,
-        '--parallax-rx': `${-y * 0.35}deg`,
-        '--parallax-ry': `${x * 0.55}deg`,
-        duration: 0.65,
-        ease: 'power3.out',
-        overwrite: 'auto',
-      })
-    }
+    gsap.to(stageRef.current, { '--parallax-x': `${x * 3}px`, '--parallax-y': `${y * 2}px`, '--glow-x': `${50 + x * 8}%`, '--glow-y': `${46 + y * 6}%`, duration: 0.65, ease: 'power3.out', overwrite: 'auto' })
+    if (!detailOpen && titleRef.current) gsap.to(titleRef.current, { '--parallax-x': `${x * 8}px`, '--parallax-y': `${y * 5}px`, '--parallax-rx': `${-y * 0.45}deg`, '--parallax-ry': `${x * 0.65}deg`, duration: 0.65, ease: 'power3.out', overwrite: 'auto' })
+    const hero = bottleRefs.current[activeRef.current]
+    if (hero) gsap.to(hero, { '--parallax-x': `${x * (detailOpen ? 5 : 7)}px`, '--parallax-y': `${y * (detailOpen ? 3 : 4)}px`, '--parallax-rx': `${-y * 1.1}deg`, '--parallax-ry': `${x * 1.6}deg`, duration: 0.65, ease: 'power3.out', overwrite: 'auto' })
+    if (detailOpen && detailInfoRef.current) gsap.to(detailInfoRef.current, { '--parallax-x': `${x * 6}px`, '--parallax-y': `${y * 4}px`, '--parallax-rx': `${-y * 0.35}deg`, '--parallax-ry': `${x * 0.55}deg`, duration: 0.65, ease: 'power3.out', overwrite: 'auto' })
   }
 
   const onPointerLeave = () => {
     if (lockedRef.current) return
     resetParallax(false)
-    gsap.to(stageRef.current, { '--glow-x': '50%', '--glow-y': '46%', duration: 0.5, ease: 'power3.out', overwrite: 'auto' })
+    gsap.to(stageRef.current, { '--parallax-x': '0px', '--parallax-y': '0px', '--glow-x': '50%', '--glow-y': '46%', duration: 0.5, ease: 'power3.out', overwrite: 'auto' })
   }
 
-  // Swipe/drag to change product — pointer events cover touch (mobile
-  // swipe) and mouse (desktop drag) with one handler. Only fires on a
-  // mostly-horizontal drag past a distance threshold, so a vertical page
-  // scroll or a tap on a button/nav control (tiny or vertical movement)
-  // isn't mistaken for a swipe.
-  const SWIPE_THRESHOLD = 48
-  const onStageDragStart = (event) => {
-    dragRef.current = { x: event.clientX, y: event.clientY }
-  }
-  const onStageDragEnd = (event) => {
-    const start = dragRef.current
-    dragRef.current = null
-    if (!start || detailOpen || lockedRef.current) return
-    const dx = event.clientX - start.x
-    const dy = event.clientY - start.y
-    if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
-      changeProduct(dx < 0 ? 1 : -1)
+  const onWheel = (event) => {
+    if (!detailOpen) {
+      event.preventDefault()
+      if (Math.abs(event.deltaY) < 8) return
+      changeProduct(event.deltaY > 0 ? 1 : -1)
     }
   }
 
-  // The detail view scrolls internally (see .spirit-detail-view) to reveal
-  // the story/heritage/character sections below the initial facts panel.
-  // The hero bottle is a sibling of this panel, not a child of it, so it
-  // doesn't scroll away on its own — fade it out by hand as the panel scrolls
-  // past it, same as the alcshowcase reference's detail-scroll.js does.
-  const onDetailScroll = (event) => {
-    if (lockedRef.current) return
-    const el = event.currentTarget
-    const progress = Math.min(1, el.scrollTop / Math.max(1, window.innerHeight * 0.9))
-    const hero = heroRef.current
-    if (hero) {
-      hero.style.opacity = String(1 - progress)
-      hero.style.visibility = progress > 0.98 ? 'hidden' : 'visible'
-    }
-    if (detailCopyRef.current) detailCopyRef.current.style.opacity = String(1 - progress)
-    setDetailScrolled(progress > 0.02)
+  const isInteractiveTarget = (target) => Boolean(target?.closest?.('button, a, input, textarea, select, [data-no-swipe]'))
+
+  const onPointerDown = (event) => {
+    if (detailOpen || lockedRef.current || !event.isPrimary || event.button !== 0 || isInteractiveTarget(event.target)) return
+    gestureRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, lastX: event.clientX, lastY: event.clientY, active: true }
+    event.currentTarget.setPointerCapture?.(event.pointerId)
   }
 
-  // "Explore bottle": the hero bottle grows in place and a detail panel
-  // (tasting note + style/origin facts) slides in beside it — an inline
-  // expansion rather than a popup modal.
+  const onPointerGestureMove = (event) => {
+    const gesture = gestureRef.current
+    if (!gesture.active || gesture.pointerId !== event.pointerId || detailOpen || lockedRef.current) return
+    gesture.lastX = event.clientX
+    gesture.lastY = event.clientY
+    const dx = event.clientX - gesture.startX
+    const dy = event.clientY - gesture.startY
+    if (Math.abs(dx) > Math.abs(dy) * 1.15 && Math.abs(dx) > 12) event.preventDefault()
+  }
+
+  const finishPointerGesture = (event) => {
+    const gesture = gestureRef.current
+    if (!gesture.active || gesture.pointerId !== event.pointerId) return
+    const dx = gesture.lastX - gesture.startX
+    const dy = gesture.lastY - gesture.startY
+    const threshold = Math.max(48, Math.min(110, (stageRef.current?.clientWidth || window.innerWidth) * 0.075))
+    const shouldSwipe = Math.abs(dx) > Math.abs(dy) * 1.15 && Math.abs(dx) >= threshold && !detailOpen && !lockedRef.current
+    gestureRef.current = { pointerId: null, startX: 0, startY: 0, lastX: 0, lastY: 0, active: false }
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) event.currentTarget.releasePointerCapture?.(event.pointerId)
+    if (shouldSwipe) changeProduct(dx < 0 ? 1 : -1)
+  }
+
+  const onPointerCancel = (event) => {
+    if (gestureRef.current.pointerId === event.pointerId) gestureRef.current = { pointerId: null, startX: 0, startY: 0, lastX: 0, lastY: 0, active: false }
+  }
+
   const openDetail = () => {
     if (lockedRef.current || detailOpen) return
     lockedRef.current = true
     resetParallax(true)
-
-    const hero = heroRef.current
-    gsap.killTweensOf([hero, detailViewRef.current, detailCopyRef.current, detailBackRef.current, titleRef.current, infoRef.current, actionRef.current])
-
-    gsap.set(detailViewRef.current, { opacity: 0 })
-    gsap.set(detailCopyRef.current, { opacity: 0, filter: 'blur(8px)', '--parallax-x': '0px', '--parallax-y': '0px', '--parallax-rx': '0deg', '--parallax-ry': '0deg' })
-    gsap.set(detailBackRef.current, { opacity: 0, y: -6, filter: 'blur(4px)' })
+    const hero = bottleRefs.current[activeRef.current]
+    const otherBottles = bottleRefs.current.filter((node) => node && node !== hero)
+    gsap.killTweensOf([hero, ...otherBottles, detailRef.current, detailInfoRef.current, detailButtonRef.current, titleRef.current, infoRef.current, counterRef.current, actionRef.current])
+    gsap.set(detailRef.current, { opacity: 0 })
+    gsap.set(detailInfoRef.current, { opacity: 0, filter: 'blur(8px)', '--parallax-x': '0px', '--parallax-y': '0px', '--parallax-rx': '0deg', '--parallax-ry': '0deg' })
+    gsap.set(detailButtonRef.current, { opacity: 0, y: -6, filter: 'blur(4px)' })
     gsap.set(titleRef.current, { opacity: 0, y: -12, filter: 'blur(6px)' })
     gsap.set(infoRef.current, { opacity: 0, y: 12, filter: 'blur(6px)' })
+    gsap.set(counterRef.current, { opacity: 0, y: 12, filter: 'blur(6px)' })
     gsap.set(actionRef.current, { opacity: 0, y: 12, filter: 'blur(6px)' })
-
+    gsap.set(otherBottles, { opacity: 0, filter: 'blur(12px)', zIndex: 1 })
+    gsap.set(hero, { left: '50%', '--detail-left': '50%' })
     setDetailOpen(true)
-    setDetailScrolled(false)
-    if (detailViewRef.current) detailViewRef.current.scrollTop = 0
-
     requestAnimationFrame(() => {
-      if (!hero || !detailViewRef.current || !detailCopyRef.current || !detailBackRef.current) {
-        lockedRef.current = false
-        return
-      }
-      // Shifted right of centre on wide viewports — the base bottle is big
-      // enough now that staying dead-centre at detail scale would run
-      // under the tasting-note column on the left. On narrow viewports the
-      // panel stacks below the bottle instead (see the 760px CSS
-      // breakpoint), so there's nothing to shift away from.
-      const detailShiftX = window.matchMedia('(max-width: 760px)').matches ? '0vw' : '14vw'
+      if (!hero || !detailRef.current || !detailInfoRef.current || !detailButtonRef.current) { lockedRef.current = false; return }
+      const detailTarget = window.matchMedia('(max-width: 800px)').matches ? '50%' : '75%'
       const timeline = gsap.timeline({ defaults: { ease: 'power3.out' }, onComplete: () => { lockedRef.current = false } })
-      timeline
-        .to(detailViewRef.current, { opacity: 1, duration: 0.32 }, 0)
-        .to(
-          hero,
-          {
-            '--base-x': detailShiftX,
-            '--base-y': '0vh',
-            '--base-scale': HERO_DETAIL_SCALE,
-            '--base-rotation': '0deg',
-            opacity: 1,
-            filter: 'drop-shadow(0 34px 40px rgba(0,0,0,.45))',
-            zIndex: 90,
-            duration: 0.82,
-            ease: 'power4.inOut',
-          },
-          0
-        )
-        .to(detailBackRef.current, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.34 }, 0.08)
-        .to(detailCopyRef.current, { opacity: 1, filter: 'blur(0px)', duration: 0.55 }, 0.12)
+      timeline.to(detailRef.current, { opacity: 1, duration: 0.32 }, 0)
+        .to(hero, { '--detail-left': detailTarget, '--base-x': '0vw', '--base-y': '0vh', '--base-scale': 1.28, '--base-rotation': '0deg', opacity: 1, filter: 'drop-shadow(0 28px 22px rgba(0,0,0,.36)) blur(0px)', zIndex: 90, duration: 0.82, ease: 'power4.inOut' }, 0)
+        .to(detailButtonRef.current, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.34 }, 0.08)
+        .to(detailInfoRef.current, { opacity: 1, filter: 'blur(0px)', duration: 0.55 }, 0.12)
     })
   }
 
@@ -426,66 +329,33 @@ export default function SpiritCarousel() {
     if (!detailOpen || lockedRef.current) return
     lockedRef.current = true
     resetParallax(true)
-
-    const hero = heroRef.current
-    if (!hero || !detailViewRef.current || !detailCopyRef.current || !detailBackRef.current) {
-      lockedRef.current = false
-      return
-    }
-    gsap.killTweensOf([hero, detailViewRef.current, detailCopyRef.current, detailBackRef.current, titleRef.current, infoRef.current, actionRef.current])
+    const hero = bottleRefs.current[activeRef.current]
+    if (!hero || !detailRef.current || !detailInfoRef.current || !detailButtonRef.current) { lockedRef.current = false; return }
+    gsap.killTweensOf([hero, detailRef.current, detailInfoRef.current, detailButtonRef.current, titleRef.current, infoRef.current, counterRef.current, actionRef.current])
     gsap.set(titleRef.current, { opacity: 0, y: -12, filter: 'blur(6px)' })
     gsap.set(infoRef.current, { opacity: 0, y: 12, filter: 'blur(6px)' })
+    gsap.set(counterRef.current, { opacity: 0, y: 12, filter: 'blur(6px)' })
     gsap.set(actionRef.current, { opacity: 0, y: 12, filter: 'blur(6px)' })
-    hero.style.visibility = 'visible'
-    setDetailScrolled(false)
-
-    const timeline = gsap.timeline({
-      defaults: { ease: 'power3.inOut' },
-      onComplete: () => {
-        setDetailOpen(false)
-        gsap.set(detailViewRef.current, { opacity: 0 })
-        setBottlePosition(hero, HERO_BASE)
-        lockedRef.current = false
-      },
-    })
-    timeline
-      .to(detailCopyRef.current, { opacity: 0, filter: 'blur(8px)', duration: 0.28 }, 0)
-      .to(detailBackRef.current, { opacity: 0, y: -6, filter: 'blur(4px)', duration: 0.24 }, 0)
-      .to(
-        hero,
-        {
-          '--base-x': '0vw',
-          '--base-y': '0vh',
-          '--base-scale': HERO_BASE.scale,
-          '--base-rotation': '0deg',
-          opacity: 1,
-          filter: 'drop-shadow(0 34px 40px rgba(0,0,0,.45))',
-          zIndex: 4,
-          duration: 0.72,
-        },
-        0.02
-      )
-      .to(detailViewRef.current, { opacity: 0, duration: 0.32 }, 0.42)
-      .to(
-        [titleRef.current, infoRef.current, actionRef.current],
-        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.42, stagger: 0.035, ease: 'power3.out' },
-        0.22
-      )
+    const timeline = gsap.timeline({ defaults: { ease: 'power4.inOut' }, onComplete: () => { setDetailOpen(false); setBottlePosition(hero, POSITIONS.hero); lockedRef.current = false } })
+    timeline.to(detailInfoRef.current, { opacity: 0, filter: 'blur(8px)', duration: 0.28 }, 0)
+      .to(detailButtonRef.current, { opacity: 0, y: -6, filter: 'blur(4px)', duration: 0.24 }, 0)
+      .to(hero, { '--detail-left': '50%', '--base-x': '0vw', '--base-y': '0vh', '--base-scale': POSITIONS.hero.scale, '--base-rotation': '0deg', opacity: 1, filter: 'drop-shadow(0 28px 22px rgba(0,0,0,.36)) blur(0px)', zIndex: 20, duration: 0.72 }, 0.02)
+      .to(detailRef.current, { opacity: 0, duration: 0.32 }, 0.42)
+      .to([titleRef.current, infoRef.current, counterRef.current, actionRef.current], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.42, stagger: 0.035, ease: 'power3.out' }, 0.22)
   }
 
   return (
-    <section
-      id="flavors"
-      data-od-id="spirit-carousel"
-      className="relative w-full overflow-hidden select-none border-t border-white/10"
-    >
+    <section id="flavors" className="relative w-full overflow-hidden select-none border-t border-white/10">
       <div
         ref={stageRef}
-        className="spirit-stage relative w-full"
+        className="relative w-full"
         style={{
           height: '100svh',
           minHeight: 660,
           overflow: 'hidden',
+          touchAction: detailOpen ? 'auto' : 'pan-y',
+          perspective: '1100px',
+          background: 'radial-gradient(circle at var(--glow-x,50%) var(--glow-y,46%), color-mix(in srgb, var(--tone-3,#a3703b) 25%, transparent), transparent 30%), linear-gradient(135deg, var(--tone-1,#1c0f06), var(--tone-2,#5C3412) 52%, var(--tone-1,#1c0f06))',
           '--tone-1': current.tones[0],
           '--tone-2': current.tones[1],
           '--tone-3': current.tones[2],
@@ -493,234 +363,82 @@ export default function SpiritCarousel() {
         }}
         onPointerMove={onPointerMove}
         onPointerLeave={onPointerLeave}
-        onPointerDown={onStageDragStart}
-        onPointerUp={onStageDragEnd}
-        onPointerCancel={() => { dragRef.current = null }}
+        onPointerDown={onPointerDown}
+        onPointerMoveCapture={onPointerGestureMove}
+        onPointerUp={finishPointerGesture}
+        onPointerCancel={onPointerCancel}
+        onWheel={onWheel}
       >
-        <div className="spirit-stage-bg" />
+        <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: GRAIN_URL, backgroundSize: '200px 200px', opacity: 0.28, zIndex: 1 }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 55%, transparent 20%, rgba(0,0,0,.28) 70%, rgba(0,0,0,.7) 100%)', zIndex: 2 }} />
 
-        {/* Grain overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            zIndex: 46,
-            opacity: 0.4,
-            backgroundImage: GRAIN_URL,
-            backgroundSize: '200px 200px',
-            backgroundRepeat: 'repeat',
-          }}
-        />
-
-        <div className="spirit-stage-vignette" />
-
-        {/* Section eyebrow — hidden below 640px (see index.css): on short
-            phones there isn't room for eyebrow + headline + bottle stacked
-            without something colliding, and this label is decorative. */}
-        <div
-          className="spirit-eyebrow absolute top-[136px] left-4 sm:left-8 z-[60] transition-opacity duration-300"
-          style={{ opacity: detailOpen ? 0 : 1, pointerEvents: detailOpen ? 'none' : 'auto' }}
-        >
-          <span className="font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-white/85">
-            Proprietary Distillation
-          </span>
+        <div ref={titleRef} className="absolute left-0 right-0 top-[13%] pointer-events-none" style={{ zIndex: 3, transform: 'translate3d(var(--parallax-x,0px),var(--parallax-y,0px),0) rotateX(var(--parallax-rx,0deg)) rotateY(var(--parallax-ry,0deg))', willChange: 'transform,opacity' }}>
+          <div style={{ fontFamily: 'var(--font-jd-display,Arial Black,sans-serif)', fontWeight: 950, fontSize: 'clamp(72px, 13vw, 220px)', lineHeight: 0.78, letterSpacing: '-0.055em', textAlign: 'center', whiteSpace: 'nowrap', color: '#fff', opacity: 0.72 }}>{current.ghostWord}</div>
         </div>
 
-        {/* Giant headline, tilts toward the cursor via its own --parallax-* vars.
-            Opacity is GSAP-owned (see the mount effect and changeProduct/openDetail
-            timelines) — not set here, so a React re-render can't fight GSAP's writes. */}
-        <div ref={titleRef} className="spirit-headline-layer pointer-events-none select-none font-serif">
-          <span className="spirit-headline-text uppercase text-white text-center block">
-            {current.ghostWord}
-          </span>
+        <div className="absolute left-5 sm:left-8 top-7 sm:top-9 z-30" style={{ fontFamily: 'var(--font-mono,monospace)', fontSize: 11, fontWeight: 800, letterSpacing: '.24em', textTransform: 'uppercase', color: 'rgba(255,255,255,.82)' }}>Proprietary Distillation</div>
+
+        <div className="absolute inset-x-0 top-0 bottom-0" style={{ zIndex: 10 }}>
+          {PRODUCTS.map((product, index) => (
+            <img
+              key={product.id}
+              ref={(node) => { bottleRefs.current[index] = node }}
+              src={product.image}
+              alt={product.name}
+              draggable={false}
+              style={bottleStyle}
+            />
+          ))}
         </div>
 
-        {/* Warm pool of light behind the bottle's foot — the spotlit
-            product-shot treatment premium spirits brands use for their
-            hero bottle, in place of a wheel of other bottles at the edges. */}
-        <div className="spirit-bottle-spotlight" aria-hidden="true" />
-
-        {/* Single hero bottle. src is swapped mid-crossfade by changeProduct
-            (see SpiritCarousel.jsx); the initial src just matches mount state. */}
-        <img
-          ref={heroRef}
-          src={current.image}
-          alt={current.name}
-          draggable={false}
-          className="spirit-bottle-img"
-        />
-
-        {/* Bottom row: spirit info + nav on the left, explore on the right,
-            both anchored to one flex row so they always share the same baseline.
-            infoRef/actionRef are true siblings (not nested) so GSAP fades each
-            independently instead of compounding opacity through a shared parent. */}
-        <div className="spirit-bottom-row">
-          <div ref={infoRef} style={{ maxWidth: 340 }}>
-            <p
-              className="font-serif uppercase text-white mb-1 sm:mb-2"
-              style={{ fontSize: 'clamp(18px, 2.4vw, 26px)', fontWeight: 900, letterSpacing: '0.01em' }}
-            >
-              {current.brandName}
-            </p>
-            <p
-              className="text-white/85 mb-2 sm:mb-3"
-              style={{ fontSize: 'clamp(13px, 1.3vw, 16px)', fontWeight: 700 }}
-            >
-              {current.productText}
-            </p>
-            <p className="hidden sm:block text-white/80 mb-5" style={{ fontSize: 13, lineHeight: 1.6, maxWidth: 300 }}>
-              {current.description}
-            </p>
-
+        <div className="absolute left-5 right-5 sm:left-8 sm:right-8 bottom-7 sm:bottom-10 flex items-end justify-between gap-6" style={{ zIndex: 30 }}>
+          <div ref={infoRef} style={{ maxWidth: 360 }}>
+            <p style={{ margin: 0, color: '#fff', fontFamily: 'var(--font-jd-display,Arial Black,sans-serif)', fontSize: 'clamp(20px,2.5vw,30px)', fontWeight: 950, lineHeight: .95 }}>{current.brandName}</p>
+            <p style={{ margin: '8px 0 10px', color: 'rgba(255,255,255,.88)', fontSize: 'clamp(13px,1.3vw,16px)', fontWeight: 750 }}>{current.productText}</p>
+            <p className="hidden sm:block" style={{ margin: '0 0 20px', maxWidth: 330, color: 'rgba(255,255,255,.72)', fontSize: 13, lineHeight: 1.55 }}>{current.description}</p>
             <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => changeProduct(-1)}
-                aria-label="Previous spirit"
-                className="flex h-11 w-11 sm:h-14 sm:w-14 items-center justify-center rounded-full border-2 border-white/70 text-white transition-all duration-150 hover:scale-[1.08] hover:border-accent hover:bg-accent/15"
-              >
-                <ArrowLeft size={20} strokeWidth={2.25} />
-              </button>
-              <button
-                type="button"
-                onClick={() => changeProduct(1)}
-                aria-label="Next spirit"
-                className="flex h-11 w-11 sm:h-14 sm:w-14 items-center justify-center rounded-full border-2 border-white/70 text-white transition-all duration-150 hover:scale-[1.08] hover:border-accent hover:bg-accent/15"
-              >
-                <ArrowRight size={20} strokeWidth={2.25} />
-              </button>
-              <span className="font-mono text-[11px] text-white/60 ml-1">
-                {String(active + 1).padStart(2, '0')} / {String(COUNT).padStart(2, '0')}
-              </span>
+              <button type="button" onClick={() => changeProduct(-1)} aria-label="Previous spirit" style={{ width: 54, height: 54, borderRadius: '50%', border: '2px solid rgba(255,255,255,.78)', background: 'transparent', color: '#fff', display: 'grid', placeItems: 'center', cursor: 'pointer' }}><ArrowLeft size={21} /></button>
+              <button type="button" onClick={() => changeProduct(1)} aria-label="Next spirit" style={{ width: 54, height: 54, borderRadius: '50%', border: '2px solid rgba(255,255,255,.78)', background: 'transparent', color: '#fff', display: 'grid', placeItems: 'center', cursor: 'pointer' }}><ArrowRight size={21} /></button>
+              <span ref={counterRef} style={{ fontFamily: 'var(--font-mono,monospace)', color: 'rgba(255,255,255,.62)', fontSize: 11, marginLeft: 3 }}>{String(active + 1).padStart(2, '0')} / {String(PRODUCTS.length).padStart(2, '0')}</span>
             </div>
           </div>
 
-          <button
-            ref={actionRef}
-            type="button"
-            onClick={openDetail}
-            className="hidden sm:flex items-center gap-2 font-serif uppercase text-white group shrink-0"
-            style={{ fontSize: 'clamp(15px, 2.4vw, 32px)', fontWeight: 900, letterSpacing: '-0.02em', lineHeight: 1 }}
-          >
-            <span className="opacity-95 transition-opacity duration-200 group-hover:opacity-100">View details</span>
-            <ArrowRight
-              className="h-4 w-4 sm:h-7 sm:w-7 transition-transform duration-200 group-hover:translate-x-1"
-              strokeWidth={2.25}
-            />
+          <button ref={actionRef} type="button" onClick={openDetail} className="hidden sm:flex items-center gap-2" style={{ border: 0, background: 'transparent', color: '#fff', cursor: 'pointer', fontFamily: 'var(--font-jd-display,Arial Black,sans-serif)', fontWeight: 950, fontSize: 'clamp(18px,2.6vw,34px)', textTransform: 'uppercase', letterSpacing: '-.025em' }}>
+            <span>View details</span><ArrowRight size={28} />
           </button>
         </div>
 
-        {/* Explore bottle: the hero bottle above grows and this panel slides
-            in beside it with the full tasting note and style/origin facts. */}
-        <div
-          ref={detailViewRef}
-          className="spirit-detail-view"
-          aria-hidden={!detailOpen}
-          aria-label={`${current.name} details`}
-          onScroll={onDetailScroll}
-        >
-          <button ref={detailBackRef} type="button" onClick={closeDetail} className="spirit-detail-back">
-            <ArrowLeft size={16} strokeWidth={2.5} />
-            <span>Back</span>
-          </button>
-          <div ref={detailCopyRef} className="spirit-detail-copy">
-            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.24em]" style={{ color: 'var(--accent)' }}>
-              {current.category}
-            </p>
-            <h2 className="font-serif uppercase text-white spirit-detail-title">{current.ghostWord}</h2>
-            <p className="spirit-detail-description">{current.description}</p>
-            <dl className="spirit-detail-facts">
-              <div>
-                <dt>Style</dt>
-                <dd>{current.style}</dd>
+        <div ref={detailRef} aria-hidden={!detailOpen} style={{ position: 'absolute', inset: 0, zIndex: 80, opacity: 0, overflowY: 'auto', overflowX: 'hidden', background: 'rgba(4,4,4,.94)', backdropFilter: 'blur(18px)' }}>
+          <button ref={detailButtonRef} type="button" onClick={closeDetail} style={{ position: 'sticky', top: 28, left: 28, zIndex: 100, margin: '28px 0 0 28px', display: 'inline-flex', alignItems: 'center', gap: 8, color: '#fff', background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.22)', borderRadius: 999, padding: '11px 16px', cursor: 'pointer', fontWeight: 800 }}><ArrowLeft size={16} /> Back</button>
+          <div ref={detailInfoRef} style={{ minHeight: '100%', padding: '7vh 7vw 12vh', display: 'grid', alignItems: 'center', gridTemplateColumns: 'minmax(280px, .8fr) minmax(300px, 1.2fr)', gap: '6vw' }}>
+            <div style={{ position: 'relative' }}>
+              <p style={{ margin: '0 0 12px', color: 'var(--accent)', fontFamily: 'var(--font-mono,monospace)', fontSize: 11, fontWeight: 800, letterSpacing: '.24em', textTransform: 'uppercase' }}>{current.category}</p>
+              <h2 style={{ margin: 0, color: '#fff', fontFamily: 'var(--font-jd-display,Arial Black,sans-serif)', fontSize: 'clamp(52px,8vw,120px)', fontWeight: 950, lineHeight: .82, letterSpacing: '-.05em', textTransform: 'uppercase' }}>{current.ghostWord}</h2>
+              <p style={{ maxWidth: 560, color: 'rgba(255,255,255,.72)', fontSize: 'clamp(15px,1.5vw,19px)', lineHeight: 1.6, marginTop: 28 }}>{current.description}</p>
+              <div className="grid grid-cols-2 gap-6" style={{ marginTop: 34, maxWidth: 520 }}>
+                <div><span style={{ display: 'block', color: 'rgba(255,255,255,.42)', fontFamily: 'var(--font-mono,monospace)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '.18em' }}>Style</span><strong style={{ color: '#fff', display: 'block', marginTop: 7 }}>{current.style}</strong></div>
+                <div><span style={{ display: 'block', color: 'rgba(255,255,255,.42)', fontFamily: 'var(--font-mono,monospace)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '.18em' }}>Origin</span><strong style={{ color: '#fff', display: 'block', marginTop: 7 }}>{current.origin}</strong></div>
               </div>
-              <div>
-                <dt>Origin</dt>
-                <dd>{current.origin}</dd>
+            </div>
+            <div style={{ display: 'grid', gap: 28 }}>
+              <div style={{ borderTop: '1px solid rgba(255,255,255,.16)', paddingTop: 28 }}>
+                <p style={{ color: 'rgba(255,255,255,.45)', fontFamily: 'var(--font-mono,monospace)', fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase', margin: 0 }}>01 / The story</p>
+                <h3 style={{ color: '#fff', fontFamily: 'var(--font-jd-display,Arial Black,sans-serif)', fontSize: 'clamp(28px,4vw,58px)', lineHeight: .92, margin: '12px 0' }}>{current.tagline}</h3>
+                <p style={{ color: 'rgba(255,255,255,.68)', lineHeight: 1.65, maxWidth: 620, margin: 0 }}>{current.description}</p>
               </div>
-            </dl>
-          </div>
-
-          {/* Story/heritage/character deep-dive, ported from alcshowcase's
-              detail-scroll.js — but built from NTS's real 1980/Goa history
-              (siteData.js companyFacts, AboutUs.jsx) and the site's own
-              product photography, not invented brand lore or hotlinked
-              photos of other distillers' bottles. */}
-          <div className="spirit-heritage-scroll">
-            <section className="spirit-heritage-section spirit-heritage-section--story">
-              <div className="spirit-heritage-copy">
-                <p className="spirit-heritage-kicker">01 / The story</p>
-                <h3 className="spirit-heritage-title">{current.tagline}</h3>
-                <p className="spirit-heritage-body">{current.description}</p>
-                <div className="spirit-heritage-fact">
-                  <span>Origin</span>
-                  <strong>{current.origin}</strong>
-                </div>
+              <div style={{ borderTop: '1px solid rgba(255,255,255,.16)', paddingTop: 28 }}>
+                <p style={{ color: 'rgba(255,255,255,.45)', fontFamily: 'var(--font-mono,monospace)', fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase', margin: 0 }}>02 / Heritage</p>
+                <h3 style={{ color: '#fff', fontFamily: 'var(--font-jd-display,Arial Black,sans-serif)', fontSize: 'clamp(28px,4vw,58px)', lineHeight: .92, margin: '12px 0' }}>Built in Goa, rooted in 1980.</h3>
+                <p style={{ color: 'rgba(255,255,255,.68)', lineHeight: 1.65, maxWidth: 620, margin: 0 }}>NTS began in 1980 in Pondicherry and grew into a spirits operation anchored by its production facility in Canacona Industrial Estate, Goa.</p>
               </div>
-              <figure className="spirit-heritage-visual">
-                <img
-                  src="/images/about-nts-bottle-collection.jpeg"
-                  alt="NTS Blenders and Distillers premium spirits collection"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <figcaption>
-                  <span>NTS collection</span>
-                </figcaption>
-              </figure>
-            </section>
-
-            <section className="spirit-heritage-section spirit-heritage-section--heritage">
-              <figure className="spirit-heritage-visual">
-                <img src={HERITAGE.image} alt={HERITAGE.imageAlt} loading="lazy" decoding="async" />
-                <figcaption>
-                  <span>{HERITAGE.imageLabel}</span>
-                </figcaption>
-              </figure>
-              <div className="spirit-heritage-copy">
-                <p className="spirit-heritage-kicker">02 / Heritage</p>
-                <h3 className="spirit-heritage-title">{HERITAGE.title}</h3>
-                <p className="spirit-heritage-lead">{HERITAGE.lead}</p>
-                <p className="spirit-heritage-body">{HERITAGE.body}</p>
+              <div style={{ borderTop: '1px solid rgba(255,255,255,.16)', paddingTop: 28, minHeight: 240 }}>
+                <p style={{ color: 'rgba(255,255,255,.45)', fontFamily: 'var(--font-mono,monospace)', fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase', margin: 0 }}>03 / Character</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', gap: 20, marginTop: 24, flexWrap: 'wrap' }}><h3 style={{ color: '#fff', fontFamily: 'var(--font-jd-display,Arial Black,sans-serif)', fontSize: 'clamp(40px,6vw,90px)', lineHeight: .82, margin: 0 }}>{current.brandName}</h3><div style={{ color: 'rgba(255,255,255,.72)', lineHeight: 1.8 }}><div>{current.style}</div><div>{current.origin}</div><div>{current.category}</div></div></div>
               </div>
-            </section>
-
-            <section
-              className="spirit-heritage-section spirit-heritage-section--character"
-              style={{ backgroundImage: `url(${current.image})` }}
-            >
-              <div className="spirit-heritage-character-overlay" />
-              <div className="spirit-heritage-character-content">
-                <p className="spirit-heritage-kicker">03 / Character</p>
-                <div className="spirit-heritage-character-row">
-                  <h3>{current.brandName}</h3>
-                  <div>
-                    <span>Style</span>
-                    <strong>{current.style}</strong>
-                    <span>Origin</span>
-                    <strong>{current.origin}</strong>
-                    <span>Category</span>
-                    <strong>{current.category}</strong>
-                  </div>
-                </div>
+              <div style={{ minHeight: '35vh', display: 'grid', placeItems: 'center', textAlign: 'center', border-top: '1px solid rgba(255,255,255,.16)' }}>
+                <div><p style={{ color: 'rgba(255,255,255,.45)', fontFamily: 'var(--font-mono,monospace)', fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase' }}>End of edition</p><h3 style={{ color: '#fff', fontFamily: 'var(--font-jd-display,Arial Black,sans-serif)', fontSize: 'clamp(30px,5vw,70px)', margin: '12px 0', lineHeight: .9 }}>{current.name}</h3></div>
               </div>
-            </section>
-
-            <section className="spirit-heritage-end">
-              <div>
-                <p>End of edition</p>
-                <h3>{current.name}</h3>
-                <div className="spirit-heritage-end-meta">
-                  <span>{current.category}</span>
-                  <span>{current.origin}</span>
-                  <span>{current.style}</span>
-                </div>
-              </div>
-            </section>
-          </div>
-
-          <div className="spirit-heritage-hint" style={{ opacity: detailScrolled ? 0 : 1 }}>
-            Scroll to discover
-            <span>↓</span>
+            </div>
           </div>
         </div>
       </div>
