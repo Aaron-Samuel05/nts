@@ -52,11 +52,14 @@
     flex: 0 1 32px !important;
   }
 
-  /* Larger mobile bottle while preserving the original PNG colors. */
+  /* Larger mobile bottles while preserving the original artwork colors. */
   .nts-spirit-bottle {
-    width: clamp(220px, 64vw, 270px) !important;
-    max-width: 64vw !important;
+    width: clamp(240px, 68vw, 285px) !important;
+    max-width: 68vw !important;
     max-height: 54vh !important;
+    /* Fade the rectangular edges of source artwork without color blending. */
+    -webkit-mask-image: radial-gradient(ellipse 48% 49% at 50% 50%, #000 66%, rgba(0,0,0,.98) 76%, transparent 100%);
+    mask-image: radial-gradient(ellipse 48% 49% at 50% 50%, #000 66%, rgba(0,0,0,.98) 76%, transparent 100%);
   }
 }
 
