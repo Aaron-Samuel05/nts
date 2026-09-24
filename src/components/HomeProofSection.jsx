@@ -1,5 +1,8 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { ArrowUpRight } from 'lucide-react'
+import ClipReveal from './motion/ClipReveal'
+import Reveal from './motion/Reveal'
+import { useScrub } from './motion/useScrub'
 import { companyFacts, facilityStats, machineryList } from '../data/siteData'
 
 const operatingSteps = [
@@ -21,16 +24,29 @@ const operatingSteps = [
 ]
 
 export default function HomeProofSection() {
+  const sectionRef = useRef(null)
+
+  // The accent line under each process step is drawn by scroll position.
+  useScrub(sectionRef, ({ gsap }) => {
+    gsap.utils.toArray('.home-proof-section__process article').forEach((step) => {
+      gsap.fromTo(
+        step,
+        { '--line': 0 },
+        { '--line': 1, ease: 'none', scrollTrigger: { trigger: step, start: 'top 80%', end: 'bottom 55%', scrub: true } }
+      )
+    })
+  })
+
   return (
-    <section className="home-proof-section" aria-labelledby="home-proof-title">
+    <section ref={sectionRef} className="home-proof-section" aria-labelledby="home-proof-title">
       <div className="home-proof-section__inner">
         <div className="home-proof-section__intro">
           <p>Operating Proof</p>
-          <h2 id="home-proof-title">From trade history to Goa production discipline.</h2>
-          <span>
+          <Reveal as="h2" id="home-proof-title">From trade history to Goa production discipline.</Reveal>
+          <Reveal as="span" variant="lines">
             NTS began as NTS Wines in {companyFacts.origin} in {companyFacts.founded} under {companyFacts.founder}. The current website presents the
             company as a manufacturing and portfolio house based around {companyFacts.facility}.
-          </span>
+          </Reveal>
           <div className="home-proof-section__intro-ledger" aria-label="Operating proof summary">
             <article>
               <strong>Canacona</strong>
@@ -47,7 +63,7 @@ export default function HomeProofSection() {
           </div>
         </div>
 
-        <div className="home-proof-section__media">
+        <ClipReveal className="home-proof-section__media">
           <video
             src="/videos/operating-proof-bottle.mp4"
             autoPlay
@@ -57,7 +73,7 @@ export default function HomeProofSection() {
             preload="metadata"
             aria-label="NTS bottle product video"
           />
-        </div>
+        </ClipReveal>
 
         <div className="home-proof-section__stats" aria-label="NTS facility facts">
           {facilityStats.slice(0, 5).map((stat) => (
@@ -73,8 +89,8 @@ export default function HomeProofSection() {
             <article key={step.label}>
               <span>{step.label}</span>
               <div>
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
+                <Reveal as="h3">{step.title}</Reveal>
+                <Reveal as="p" variant="lines">{step.body}</Reveal>
               </div>
             </article>
           ))}
