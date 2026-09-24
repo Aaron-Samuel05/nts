@@ -36,7 +36,7 @@ export default function BannerSection() {
   )
 }
 
-<style data-nts-hero-css>{`
+      <style>{`
         .nts-hero{
           position:relative;
           width:100%;
@@ -147,3 +147,6 @@ export default function BannerSection() {
         }
         @media(prefers-reduced-motion:reduce){.nts-hero__media{animation:none}}
 `}</style>
+    </section>
+  )
+}
