@@ -4597,3 +4597,174 @@ a {
     font-size: clamp(30px, 9.4vw, 46px);
   }
 }
+
+
+/* NTS mobile refinement — keeps the existing desktop design intact. */
+@media (max-width: 760px) {
+  html {
+    overflow-x: hidden;
+    scroll-padding-top: 76px;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .inner-page-nav {
+    min-height: 72px;
+    padding: 10px max(14px, env(safe-area-inset-left)) 10px max(14px, env(safe-area-inset-right));
+    gap: 10px;
+  }
+
+  .inner-page-nav__brand {
+    gap: 9px;
+    min-width: 0;
+  }
+
+  .inner-page-nav__brand img {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+  }
+
+  .inner-page-nav__brand span {
+    max-width: calc(100vw - 118px);
+    font-size: clamp(15px, 4.6vw, 20px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .inner-page-nav__toggle {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+  }
+
+  [data-od-id="hero-single-image"] {
+    height: min(720px, calc(100svh - 72px));
+    min-height: 570px;
+  }
+
+  [data-od-id="hero-single-image"] img {
+    object-position: 61% top !important;
+  }
+
+  [data-od-id="hero-single-image"]::before {
+    background:
+      linear-gradient(90deg, rgba(0,0,0,.42) 0%, rgba(0,0,0,.12) 55%, rgba(0,0,0,.04) 100%),
+      linear-gradient(180deg, rgba(0,0,0,.16), transparent 35%, rgba(0,0,0,.22) 100%);
+  }
+
+  .hero-vertical-shade {
+    background: linear-gradient(180deg, rgba(0,0,0,.08), transparent 42%, rgba(0,0,0,.16) 100%) !important;
+  }
+
+  .home-hero-content {
+    padding-top: clamp(30px, 6svh, 54px);
+    padding-bottom: 34px;
+  }
+
+  .home-hero-copy {
+    width: min(88vw, 380px);
+  }
+
+  .home-hero-kicker {
+    font-size: 9px;
+    letter-spacing: .2em;
+    line-height: 1.35;
+  }
+
+  #home-hero-title {
+    margin-top: 12px;
+    max-width: 8.9ch;
+    font-size: clamp(3rem, 14.4vw, 4.7rem);
+    line-height: .79;
+  }
+
+  .hero-intro {
+    max-width: 30ch;
+    margin-top: 12px;
+    font-size: clamp(13px, 3.5vw, 16px);
+    line-height: 1.22;
+  }
+
+  .nts-spirit-stage {
+    min-height: calc(100svh - 72px) !important;
+    height: auto !important;
+  }
+
+  .nts-spirit-ghost {
+    top: 39% !important;
+    font-size: clamp(54px, 17vw, 76px) !important;
+    opacity: .18 !important;
+  }
+
+  .nts-spirit-bottle {
+    width: clamp(190px, 55vw, 230px) !important;
+    max-width: 55vw !important;
+    max-height: 46vh !important;
+  }
+
+  .nts-spirit-info {
+    bottom: 84px !important;
+  }
+
+  .nts-spirit-controls {
+    bottom: 14px !important;
+  }
+
+  .nts-spirit-action {
+    right: 14px !important;
+    bottom: 20px !important;
+  }
+
+  .nts-spirit-detail {
+    padding: 74px 18px 54px !important;
+  }
+
+  .nts-spirit-detail-info {
+    padding-top: 37vh !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .inner-page-nav {
+    padding-inline: 12px;
+  }
+
+  .inner-page-nav__brand span {
+    font-size: 16px;
+  }
+
+  [data-od-id="hero-single-image"] {
+    min-height: 560px;
+  }
+
+  [data-od-id="hero-single-image"] img {
+    object-position: 63% top !important;
+  }
+
+  .home-hero-copy {
+    width: calc(100vw - 28px);
+  }
+
+  #home-hero-title {
+    font-size: clamp(2.85rem, 14.2vw, 4rem);
+  }
+
+  .hero-intro {
+    max-width: 27ch;
+    font-size: 13px;
+  }
+
+  .nts-spirit-info {
+    left: 14px !important;
+    right: 14px !important;
+  }
+
+  .nts-spirit-action {
+    right: 12px !important;
+    font-size: 14px !important;
+  }
+}
