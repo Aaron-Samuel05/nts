@@ -38,8 +38,8 @@ export default function BannerSection() {
   .nts-hero{
     position:relative;
     width:100%;
-    height:clamp(620px, calc(100svh - 105px), 704px);
-    min-height:620px;
+    height:calc(100svh - 105px - 38px);
+    min-height:0;
     overflow:hidden;
     isolation:isolate;
     background:#080808;
@@ -59,8 +59,10 @@ export default function BannerSection() {
   }
   .nts-hero__media img{
     display:block;
+    width:100%;
+    height:100%;
     object-fit:cover;
-    object-position:center center;
+    object-position:center 52%;
     filter:saturate(.96) contrast(1.02);
   }
   .nts-hero__shade{
@@ -126,12 +128,12 @@ export default function BannerSection() {
   }
 
   @media(max-width:1100px){
-    .nts-hero{height:clamp(600px, calc(100svh - 105px), 704px)}
+    .nts-hero{height:calc(100svh - 105px - 38px);min-height:0}
     .nts-hero__copy{left:32px;width:46vw}
     .nts-hero h1{font-size:clamp(58px, 7vw, 78px)}
   }
   @media(max-width:700px){
-    .nts-hero{height:calc(100svh - 104px);min-height:650px;max-height:none}
+    .nts-hero{height:calc(100svh - 104px - 38px);min-height:560px;max-height:none}
     .nts-hero__media img{object-position:62% center}
     .nts-hero__shade{
       background:
