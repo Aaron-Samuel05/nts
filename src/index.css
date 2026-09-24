@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -117,14 +119,14 @@
     --blue: #1e293b;
     --strawberry: #111111;
     --ink: #FFFFFF;
-    --font-display: "NTS JD Display", "Geist Sans", system-ui, sans-serif;
-    --font-body: "NTS JD Text", "Geist Sans", system-ui, sans-serif;
+    --font-display: "Fraunces", "NTS JD Display", "Geist Sans", system-ui, serif;
+    --font-body: "DM Sans", "NTS JD Text", "Geist Sans", system-ui, sans-serif;
     --font-mono: "Geist Mono", ui-monospace, monospace;
-    --font-brand: "NTS JD Display", "Geist Sans", system-ui, sans-serif;
-    --font-nav: "NTS JD Condensed", "Geist Sans", system-ui, sans-serif;
-    --font-jd-display: "NTS JD Display", "Geist Sans", system-ui, sans-serif;
-    --font-jd-condensed: "NTS JD Condensed", "Geist Sans", system-ui, sans-serif;
-    --font-jd-text: "NTS JD Text", "Geist Sans", system-ui, sans-serif;
+    --font-brand: "Fraunces", "NTS JD Display", "Geist Sans", system-ui, serif;
+    --font-nav: "DM Sans", "NTS JD Condensed", "Geist Sans", system-ui, sans-serif;
+    --font-jd-display: "Fraunces", "NTS JD Display", "Geist Sans", system-ui, serif;
+    --font-jd-condensed: "DM Sans", "NTS JD Condensed", "Geist Sans", system-ui, sans-serif;
+    --font-jd-text: "DM Sans", "NTS JD Text", "Geist Sans", system-ui, sans-serif;
     --font-pixel-square: "Geist Pixel Square", "Geist Mono", monospace;
     --font-pixel-grid: "Geist Pixel Grid", "Geist Mono", monospace;
     --font-pixel-circle: "Geist Pixel Circle", "Geist Mono", monospace;
@@ -3971,7 +3973,7 @@ a {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: clamp(48px, 8vh, 88px);
+  padding-top: clamp(140px, 19vh, 190px);
   padding-inline: 16px;
   pointer-events: none;
   transform: translate3d(var(--parallax-x), var(--parallax-y), 0) rotateX(var(--parallax-rx)) rotateY(var(--parallax-ry));
@@ -3988,12 +3990,8 @@ a {
 }
 
 @media (max-width: 640px) {
-  .spirit-eyebrow {
-    display: none;
-  }
-
   .spirit-headline-layer {
-    padding-top: clamp(64px, 10vh, 100px);
+    padding-top: clamp(132px, 17vh, 170px);
   }
 
   .spirit-headline-text {
@@ -4026,7 +4024,7 @@ a {
   position: absolute;
   left: 50%;
   top: 93%;
-  height: clamp(420px, 66vh, 820px);
+  height: clamp(360px, 58vh, 760px);
   width: auto;
   max-width: min(58vw, 540px);
   object-fit: contain;
@@ -4044,8 +4042,10 @@ a {
   transform-origin: 50% 100%;
   transform-style: preserve-3d;
   will-change: transform, filter, opacity;
+  filter: drop-shadow(0 34px 40px rgba(0, 0, 0, .45));
   user-select: none;
   pointer-events: none;
+  /* One of five cascade bottles; SpiritCarousel.jsx positions each by slot. */
   opacity: 0;
 }
 
@@ -4511,5 +4511,89 @@ a {
   }
   .spirit-heritage-character-row > div {
     padding-left: 1rem;
+  }
+}
+
+/* Reveal effects (src/components/motion): hidden only when scripting is on and
+   motion is allowed, so no-JS and reduced-motion visitors always see content. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal] { visibility: hidden; }
+  [data-clip="inset"] { clip-path: inset(0% 0% 100% 0%); }
+  [data-clip="ellipse"] { clip-path: ellipse(75% 0% at 50% -5%); }
+}
+
+/* Mobile menu: ellipse wipe from the top edge instead of a plain fade. */
+@media (prefers-reduced-motion: no-preference) {
+  .menu-panel {
+    clip-path: ellipse(75% 0% at 50% -5%);
+    transition: opacity .5s var(--ease), clip-path .9s cubic-bezier(.77, 0, .18, 1), visibility 0s linear .9s;
+  }
+  .menu-panel.open {
+    clip-path: ellipse(120% 145% at 50% -5%);
+    transition: opacity .3s var(--ease), clip-path .9s cubic-bezier(.77, 0, .18, 1), visibility 0s;
+  }
+}
+
+/* Operating-proof steps: the accent line under each step is drawn by scroll
+   (--line is tweened 0 -> 1 by HomeProofSection). */
+.home-proof-section__process article {
+  position: relative;
+  --line: 1;
+}
+.home-proof-section__process article::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(var(--line));
+  transform-origin: left;
+  pointer-events: none;
+}
+
+/* Heading scale: section h2s and inner-page h1s share one smaller, fluid size
+   so long words (e.g. "PRODUCTION") fit narrow screens without clipping. */
+.home-proof-section__intro h2,
+.content-page__expansion-copy h2,
+.collection-visit-section__copy h2,
+.product-related__header h2,
+.manifesto h2,
+.section-head h2,
+.film h2,
+.lifestyle h2 {
+  font-size: clamp(30px, 4.6vw, 72px);
+  line-height: 1;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.collection-hero__copy h1,
+.legal-page__hero h1,
+.product-detail-hero__copy h1,
+.content-page__hero-copy h1 {
+  font-size: clamp(34px, 5.6vw, 80px);
+  line-height: 1;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 760px) {
+  .home-proof-section__intro h2,
+  .content-page__expansion-copy h2,
+  .collection-visit-section__copy h2,
+  .product-related__header h2,
+  .manifesto h2,
+  .section-head h2,
+  .film h2,
+  .lifestyle h2 {
+    font-size: clamp(26px, 8.2vw, 40px);
+  }
+
+  .collection-hero__copy h1,
+  .legal-page__hero h1,
+  .product-detail-hero__copy h1,
+  .content-page__hero-copy h1 {
+    font-size: clamp(30px, 9.4vw, 46px);
   }
 }
