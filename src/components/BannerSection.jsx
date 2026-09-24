@@ -1,152 +1,59 @@
 import React from 'react'
+import Reveal from './motion/Reveal'
 
 const heroImage = '/banner/east-coast-bottle-lineup-hero-desktop.png'
 
 export default function BannerSection() {
   return (
-    <section className="nts-hero" id="top" aria-labelledby="home-hero-title">
-      <div className="nts-hero__media" aria-hidden="true">
-        <picture>
-          <source media="(max-width: 700px)" srcSet="/banner/east-coast-bottle-lineup-hero-mobile.png" />
-          <img src={heroImage} alt="" loading="eager" />
+    <section
+      className="relative h-[72vh] min-h-[560px] w-full overflow-hidden bg-[#030303] text-white sm:h-[78vh] md:h-[82vh] lg:h-[86vh] lg:max-h-[920px]"
+      id="top"
+      data-od-id="hero-single-image"
+      aria-labelledby="home-hero-title"
+    >
+      <div className="absolute inset-0" data-parallax-speed="-0.08" data-parallax-scale="1.04">
+        <picture className="block h-full w-full">
+          <source media="(max-width: 1100px)" srcSet="/banner/east-coast-bottle-lineup-hero-mobile.webp" type="image/webp" />
+          <source media="(max-width: 1100px)" srcSet="/banner/east-coast-bottle-lineup-hero-mobile.png" />
+          <source srcSet="/banner/east-coast-bottle-lineup-hero-desktop.webp" type="image/webp" />
+          <img
+            src={heroImage}
+            alt="NTS Distillers bottle lineup on a table"
+            className="h-full w-full object-cover object-center"
+            loading="eager"
+            fetchpriority="high"
+          />
         </picture>
       </div>
 
-      <div className="nts-hero__shade" aria-hidden="true" />
+      <div className="hero-vertical-shade pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_38%,rgba(255,255,255,0.12)_100%)]" />
 
-      <div className="nts-hero__copy">
-        <p className="nts-hero__eyebrow">
-          GOA MANUFACTURING <span>/</span> PROPRIETARY<br />
-          IMFL BRANDS
-        </p>
-
-        <h1 id="home-hero-title">
-          <span>NTS</span>
-          <span>BLENDERS,</span>
-          <span>BUILT TO</span>
-          <span>POUR</span>
-        </h1>
-
-        <p className="nts-hero__intro">
-          Goa production and contract bottling.<br />
-          Whisky, brandy, rum and vodka labels.
-        </p>
+      <div className="home-hero-content relative z-10 flex h-full items-center px-4 py-10 sm:px-8 sm:py-14 lg:px-12 lg:py-16">
+        <div className="home-hero-copy max-w-[860px]">
+          <Reveal
+            as="p"
+            variant="lines"
+            className="home-hero-kicker font-mono text-[10px] font-black uppercase tracking-[0.28em] text-[#E9542E] sm:text-xs"
+          >
+            <span>Goa manufacturing / proprietary</span>
+            <span>IMFL brands</span>
+          </Reveal>
+          <Reveal
+            as="h1"
+            id="home-hero-title"
+            delay={0.1}
+            className="mt-4 max-w-[10.8ch] font-serif text-[clamp(3.4rem,8.2vw,8.9rem)] font-black uppercase leading-[0.86] tracking-normal text-white drop-shadow-[0_14px_34px_rgba(0,0,0,0.42)]"
+          >
+            <span className="hero-title-line">NTS</span>
+            <span className="hero-title-line hero-title-line--blenders">Blenders,</span>
+            <span className="hero-title-line hero-title-line--pour">Built to Pour</span>
+          </Reveal>
+          <Reveal as="p" variant="lines" delay={0.5} className="hero-intro">
+            <span>Goa production and contract bottling.</span>
+            <span>Whisky, brandy, rum and vodka labels.</span>
+          </Reveal>
+        </div>
       </div>
-
-
-<style>{`
-  .nts-hero{
-    position:relative;
-    width:100%;
-    height:calc(100svh - 105px - 38px);
-    min-height:0;
-    overflow:hidden;
-    isolation:isolate;
-    background:#080808;
-    color:#fff;
-  }
-  .nts-hero__media,
-  .nts-hero__media picture,
-  .nts-hero__media img{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-  }
-  .nts-hero__media{
-    z-index:-3;
-    animation:ntsHeroReveal .9s cubic-bezier(.16,1,.3,1) both;
-  }
-  .nts-hero__media img{
-    display:block;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:center 52%;
-    filter:saturate(.96) contrast(1.02);
-  }
-  .nts-hero__shade{
-    position:absolute;
-    inset:0;
-    z-index:-2;
-    pointer-events:none;
-    background:
-      linear-gradient(90deg,
-        rgba(0,0,0,.88) 0%,
-        rgba(0,0,0,.72) 19%,
-        rgba(0,0,0,.38) 35%,
-        rgba(0,0,0,.10) 54%,
-        rgba(0,0,0,0) 73%),
-      linear-gradient(180deg,
-        rgba(0,0,0,.10) 0%,
-        rgba(0,0,0,0) 52%,
-        rgba(0,0,0,.12) 82%,
-        rgba(0,0,0,.22) 100%);
-  }
-  .nts-hero__copy{
-    position:absolute;
-    left:clamp(40px, 3.15vw, 52px);
-    top:clamp(58px, 6.1vh, 70px);
-    width:min(520px, 34vw);
-  }
-  .nts-hero__eyebrow{
-    margin:0 0 20px;
-    color:#f25a2c;
-    font:800 10px/1.55 var(--font-mono);
-    letter-spacing:.27em;
-    text-transform:uppercase;
-    text-shadow:0 2px 10px rgba(0,0,0,.55);
-  }
-  .nts-hero__eyebrow span{
-    color:rgba(255,255,255,.7);
-    padding:0 7px;
-  }
-  .nts-hero h1{
-    margin:0;
-    font-family:var(--font-display);
-    font-size:clamp(66px, 5.2vw, 88px);
-    font-weight:950;
-    line-height:.88;
-    letter-spacing:-.035em;
-    text-transform:uppercase;
-    text-shadow:0 7px 24px rgba(0,0,0,.42);
-  }
-  .nts-hero h1 span{
-    display:block;
-    white-space:nowrap;
-  }
-  .nts-hero__intro{
-    margin:27px 0 0;
-    color:#f5f5f5;
-    font:600 clamp(17px, 1.3vw, 21px)/1.38 var(--font-body);
-    letter-spacing:-.015em;
-    text-shadow:0 4px 15px rgba(0,0,0,.7);
-  }
-  @keyframes ntsHeroReveal{
-    from{opacity:0;transform:scale(1.018)}
-    to{opacity:1;transform:scale(1)}
-  }
-
-  @media(max-width:1100px){
-    .nts-hero{height:calc(100svh - 105px - 38px);min-height:0}
-    .nts-hero__copy{left:32px;width:46vw}
-    .nts-hero h1{font-size:clamp(58px, 7vw, 78px)}
-  }
-  @media(max-width:700px){
-    .nts-hero{height:calc(100svh - 104px - 38px);min-height:560px;max-height:none}
-    .nts-hero__media img{object-position:62% center}
-    .nts-hero__shade{
-      background:
-        linear-gradient(90deg,rgba(0,0,0,.9),rgba(0,0,0,.62) 60%,rgba(0,0,0,.12)),
-        linear-gradient(180deg,rgba(0,0,0,.1),transparent 48%,rgba(0,0,0,.55));
-    }
-    .nts-hero__copy{left:20px;right:20px;top:54px;width:auto}
-    .nts-hero__eyebrow{font-size:8px;letter-spacing:.2em;margin-bottom:17px}
-    .nts-hero h1{font-size:clamp(48px, 13.5vw, 72px);line-height:.88}
-    .nts-hero__intro{font-size:15px;margin-top:21px}
-  }
-  @media(prefers-reduced-motion:reduce){.nts-hero__media{animation:none}}
-`}</style>
     </section>
   )
 }
