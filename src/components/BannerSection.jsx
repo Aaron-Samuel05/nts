@@ -87,8 +87,8 @@ export default function BannerSection() {
         .nts-hero {
           --orange: #E9542E;
           position: relative;
-          min-height: max(720px, calc(100svh - 105px));
-          height: min(860px, calc(100svh - 105px));
+          min-height: 620px;
+          height: min(700px, 70vw, calc(100svh - 105px));
           width: 100%;
           overflow: hidden;
           isolation: isolate;
@@ -113,7 +113,7 @@ export default function BannerSection() {
 
         .nts-hero__media img {
           object-fit: cover;
-          object-position: center center;
+          object-position: center 54%;
           filter: saturate(.92) contrast(1.05);
         }
 
@@ -141,14 +141,14 @@ export default function BannerSection() {
           height: 100%;
           max-width: 1440px;
           margin: 0 auto;
-          padding: clamp(60px, 7vh, 90px) 48px 105px;
+          padding: clamp(48px, 6vh, 72px) 48px 96px;
           display: flex;
           flex-direction: column;
           justify-content: center;
         }
 
         .nts-hero__copy {
-          width: min(680px, 48vw);
+          width: min(620px, 43vw);
           margin-top: -46px;
         }
 
@@ -168,7 +168,7 @@ export default function BannerSection() {
           flex-direction: column;
           color: #fff;
           font-family: var(--font-display);
-          font-size: clamp(56px, 5.5vw, 92px);
+          font-size: clamp(48px, 4.6vw, 76px);
           font-weight: 950;
           line-height: .88;
           letter-spacing: -.025em;
