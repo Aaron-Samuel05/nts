@@ -12,6 +12,9 @@ import BannerSection from './components/BannerSection'
 import AnnouncementMarquee from './components/layout/AnnouncementMarquee'
 import ProductModal from './components/product/ProductModal'
 import SpiritCarousel from './components/SpiritCarousel'
+import ClipReveal from './components/motion/ClipReveal'
+import PageLoader from './components/motion/PageLoader'
+import Reveal from './components/motion/Reveal'
 import { ContentPage, NotFoundPage, ProductDetailPage } from './components/ContentPage'
 import { setPageSeo } from './lib/seo'
 import { getSeoRoute } from './data/seoRoutes'
@@ -102,8 +105,9 @@ function HomePage() {
 
   return (
     <div className="bg-bg text-fg antialiased selection:bg-accent selection:text-ink">
+      <PageLoader />
       <AgeGate />
-      
+
       <a className="skip-link" href="#main">Skip to content</a>
 
       {/* Top Announcement Marquee Ticker & Navbar Header */}
@@ -227,32 +231,32 @@ function HomePage() {
               <div className="hidden min-h-[500px] lg:block lg:col-span-7 xl:col-span-7 2xl:col-span-7" />
 
               {/* Right Column: Goa Facility Card */}
-              <div className="legacy-facility-card reveal premium-panel space-y-4 rounded-[2.5rem] bg-white p-7 text-[#050505] shadow-2xl sm:p-9 lg:col-span-5 xl:col-span-5 2xl:col-span-5 lg:p-10">
+              <ClipReveal className="legacy-facility-card premium-panel space-y-4 rounded-[2.5rem] bg-white p-7 text-[#050505] shadow-2xl sm:p-9 lg:col-span-5 xl:col-span-5 2xl:col-span-5 lg:p-10">
                 <div className="space-y-1">
                   <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#E9542E]">
                     CANACONA, GOA • MANUFACTURING FACILITY
                   </span>
-                  <h2 className="font-serif text-2xl sm:text-3xl lg:text-[32px] font-black uppercase leading-[1.05] tracking-tight text-[#050505]">
+                  <Reveal as="h2" delay={0.25} className="font-serif text-2xl sm:text-3xl lg:text-[32px] font-black uppercase leading-[1.05] tracking-tight text-[#050505]">
                     Built for Clean, Controlled Production
-                  </h2>
+                  </Reveal>
                 </div>
 
                 <div className="space-y-2.5 font-sans text-xs sm:text-[12.5px] font-medium leading-relaxed text-[#050505]/85">
-                  <p>
+                  <Reveal as="p" delay={0.35}>
                     NTS operates from a three-acre unit in Canacona Industrial Estate, Goa, with green surroundings and road access through a state highway connected to NH 66.
-                  </p>
-                  <p>
+                  </Reveal>
+                  <Reveal as="p" delay={0.45}>
                     The facility is planned around disciplined throughput: 75,000 cases of monthly production capacity and a bonded warehouse built for 25,000 cases.
-                  </p>
-                  <p>
+                  </Reveal>
+                  <Reveal as="p" delay={0.55}>
                     Rotary washers, 8-head vacuum fillers, ROPP and Guala cap systems, inspection units, labelling, printing, conveyors, rejection tanks, packing support, and an R&D lab keep the line practical, traceable, and quality-focused.
-                  </p>
-                  <p className="border-l-2 border-[#E9542E] pl-3 text-[#050505] font-semibold text-[11.5px] sm:text-xs">
+                  </Reveal>
+                  <Reveal as="p" delay={0.65} className="border-l-2 border-[#E9542E] pl-3 text-[#050505] font-semibold text-[11.5px] sm:text-xs">
                     The next phase raises the ceiling further toward 2,50,000 cases of monthly production capacity.
-                  </p>
+                  </Reveal>
                 </div>
 
-              </div>
+              </ClipReveal>
             </div>
           </div>
         </section>
