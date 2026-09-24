@@ -1,7 +1,7 @@
 import React from 'react'
 import Reveal from './motion/Reveal'
 
-const heroImage = '/banner/east-coast-bottle-lineup-hero-desktop.png'
+const heroImage = '/banner/heroimagefornts.png'
 
 export default function BannerSection() {
   return (
@@ -13,13 +13,10 @@ export default function BannerSection() {
     >
       <div className="absolute inset-0" data-parallax-speed="-0.08" data-parallax-scale="1.04">
         <picture className="block h-full w-full">
-          <source media="(max-width: 1100px)" srcSet="/banner/east-coast-bottle-lineup-hero-mobile.webp" type="image/webp" />
-          <source media="(max-width: 1100px)" srcSet="/banner/east-coast-bottle-lineup-hero-mobile.png" />
-          <source srcSet="/banner/east-coast-bottle-lineup-hero-desktop.webp" type="image/webp" />
           <img
             src={heroImage}
             alt="NTS Distillers bottle lineup on a table"
-            className="h-full w-full object-cover object-center"
+            className="h-full w-full object-cover" style={{ objectPosition: "40% center" }}
             loading="eager"
             fetchpriority="high"
           />
