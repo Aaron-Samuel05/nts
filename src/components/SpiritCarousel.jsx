@@ -144,8 +144,9 @@ export default function SpiritCarousel() {
       const hero = bottleRefs.current[activeRef.current]
       gsap.killTweensOf([hero, titleRef.current, infoRef.current, controlsRef.current, actionRef.current])
       gsap.timeline({ defaults: { ease: 'power4.inOut' } })
+        .set(hero, { zIndex: 45, filter: 'brightness(1.12) drop-shadow(0 28px 22px rgba(0,0,0,.42))' }, 0)
         .to([titleRef.current, infoRef.current, controlsRef.current, actionRef.current], { opacity: 0, y: -24, filter: 'blur(8px)', duration: 0.4, stagger: 0.025 }, 0)
-        .to(hero, isMobile ? { '--x': '0vw', '--y': '-14vh', '--scale': 0.62, '--rotation': '0deg', filter: 'brightness(1.2) drop-shadow(0 20px 18px rgba(0,0,0,.42))', duration: 0.65 } : { '--x': '-22vw', '--y': '0vh', '--scale': 1.08, '--rotation': '0deg', filter: 'brightness(1.2) drop-shadow(0 28px 22px rgba(0,0,0,.42))', duration: 0.85 }, 0.08)
+        .to(hero, isMobile ? { '--x': '0vw', '--y': '-14vh', '--scale': 0.62, '--rotation': '0deg', filter: 'brightness(1.18) drop-shadow(0 20px 18px rgba(0,0,0,.42))', duration: 0.65 } : { '--x': '-22vw', '--y': '0vh', '--scale': 1.08, '--rotation': '0deg', filter: 'brightness(1.18) drop-shadow(0 28px 22px rgba(0,0,0,.42))', duration: 0.85 }, 0.08)
         .fromTo(detailRef.current, { opacity: 0, yPercent: 7 }, { opacity: 1, yPercent: 0, duration: isMobile ? 0.55 : 0.8 }, 0.2)
         .fromTo(detailInfoRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.55 }, 0.4)
     })
@@ -154,7 +155,7 @@ export default function SpiritCarousel() {
   function closeDetail() {
     if (!detailOpen) return
     const hero = bottleRefs.current[activeRef.current]
-    gsap.timeline({ defaults: { ease: 'power4.inOut' }, onComplete: () => { setDetailOpen(false); resetParallax() } })
+    gsap.timeline({ defaults: { ease: 'power4.inOut' }, onComplete: () => { setDetailOpen(false); gsap.set(hero, { zIndex: POSITIONS.hero.z }); resetParallax() } })
       .to(detailInfoRef.current, { opacity: 0, y: 25, duration: 0.3 }, 0)
       .to(detailRef.current, { opacity: 0, yPercent: 7, duration: isMobile ? 0.4 : 0.55 }, 0)
       .to(hero, isMobile ? { '--x': '0vw', '--y': '-6vh', '--scale': 0.70, filter: 'drop-shadow(0 24px 20px rgba(0,0,0,.36))', duration: 0.6 } : { '--x': '0vw', '--y': '-1vh', '--scale': 1.1, filter: 'drop-shadow(0 28px 22px rgba(0,0,0,.36))', duration: 0.8 }, 0.05)
