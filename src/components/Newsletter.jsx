@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import Reveal from './motion/Reveal'
 
 const newsletterBottleA = '/portfolio-images/old-town.png'
 const newsletterBottleB = '/bottle-2/bottle (1).png'
@@ -126,9 +127,9 @@ export default function Newsletter() {
           </div>
 
           {/* Bold Serif Headline */}
-          <h2 className="mx-auto mt-6 max-w-[850px] font-serif text-[clamp(2.1rem,11vw,4.4rem)] font-black uppercase leading-[1.02] tracking-tight text-white sm:leading-[1.04]">
+          <Reveal as="h2" className="mx-auto mt-6 max-w-[850px] font-serif text-[clamp(2.1rem,11vw,4.4rem)] font-black uppercase leading-[1.02] tracking-tight text-white sm:leading-[1.04]">
             TRADE-READY SPIRITS, BOTTLING CAPACITY, AND PARTNERSHIP OPPORTUNITIES.
-          </h2>
+          </Reveal>
 
         </motion.div>
 
