@@ -1,6 +1,6 @@
 import React from 'react'
 
-const heroImage = '/banner/east-coast-bottle-lineup-hero-desktop.png'
+const heroImage = '/banner/east-coast-bottle-lineup-hero.jpg'
 
 export default function BannerSection() {
   return (
