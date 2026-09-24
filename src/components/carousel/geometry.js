@@ -53,14 +53,13 @@ export function placeAtSlot(slot) {
 }
 
 /**
- * Fades an item out over the last stretch before it is recycled, so the jump
- * is invisible even on aspect ratios the stage does not perfectly cover.
+ * Only the bottle at centre is shown. Neighbours are fully hidden one slot
+ * away, so a switch reads as one bottle leaving while the next arrives
+ * (a crossfade along the diagonal) instead of a row of clipped bottles.
+ * This also covers the recycle jump, which happens far off screen.
  */
 export function slotOpacity(slot) {
-  const d = Math.abs(slot)
-  const fadeStart = VISIBLE_SLOTS - 0.9
-  if (d <= fadeStart) return 1
-  return Math.max(0, 1 - (d - fadeStart) / 0.9)
+  return Math.max(0, 1 - Math.abs(slot))
 }
 
 /** Scale that makes the design-space stage cover a viewport. */
